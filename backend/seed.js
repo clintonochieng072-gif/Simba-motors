@@ -266,10 +266,14 @@ async function seedDatabase() {
       process.env.MONGO_URI || "mongodb://localhost:27017/simba-motors"
     );
 
-    // Clear existing cars
-    await Car.deleteMany({});
+    // Check if cars already exist
+    const existingCars = await Car.countDocuments();
+    if (existingCars > 0) {
+      console.log(`Database already has ${existingCars} cars. Skipping seeding to preserve existing data.`);
+      process.exit(0);
+    }
 
-    // Insert dummy cars
+    // Insert dummy cars only if database is empty
     await Car.insertMany(dummyCars);
 
     console.log("Database seeded successfully with dummy car data!");

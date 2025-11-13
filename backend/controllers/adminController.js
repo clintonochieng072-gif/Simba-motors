@@ -65,8 +65,13 @@ exports.addCar = async (req, res) => {
 
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
-        const result = await cloudinary.uploader.upload(file.path);
-        images.push(result.secure_url);
+        try {
+          const result = await cloudinary.uploader.upload(file.path);
+          images.push(result.secure_url);
+        } catch (cloudinaryError) {
+          console.error("Cloudinary upload error:", cloudinaryError);
+          throw new Error("Failed to upload image to cloud storage");
+        }
       }
     }
 
@@ -74,8 +79,11 @@ exports.addCar = async (req, res) => {
     let processedFeatures = [];
     if (Array.isArray(features)) {
       processedFeatures = features;
-    } else if (typeof features === 'string') {
-      processedFeatures = features.split(',').map(f => f.trim()).filter(f => f);
+    } else if (typeof features === "string") {
+      processedFeatures = features
+        .split(",")
+        .map((f) => f.trim())
+        .filter((f) => f);
     }
 
     const car = new Car({
@@ -91,7 +99,7 @@ exports.addCar = async (req, res) => {
       bodyType,
       color,
       ownershipHistory,
-      verifiedSeller: verifiedSeller === 'true',
+      verifiedSeller: verifiedSeller === "true",
       engine,
       features: processedFeatures,
       status: status || "Published",
@@ -101,8 +109,10 @@ exports.addCar = async (req, res) => {
     const savedCar = await car.save();
     res.status(201).json(savedCar);
   } catch (error) {
-    console.error('Error adding car:', error);
-    res.status(500).json({ message: 'Failed to add car', error: error.message });
+    console.error("Error adding car:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to add car", error: error.message });
   }
 };
 
@@ -114,8 +124,13 @@ exports.updateCar = async (req, res) => {
 
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
-        const result = await cloudinary.uploader.upload(file.path);
-        images.push(result.secure_url);
+        try {
+          const result = await cloudinary.uploader.upload(file.path);
+          images.push(result.secure_url);
+        } catch (cloudinaryError) {
+          console.error("Cloudinary upload error:", cloudinaryError);
+          throw new Error("Failed to upload image to cloud storage");
+        }
       }
       updateData.images = images;
     }
@@ -123,17 +138,29 @@ exports.updateCar = async (req, res) => {
     // Only update fields that are provided
     if (req.body.name !== undefined) updateData.name = req.body.name;
     if (req.body.model !== undefined) updateData.model = req.body.model;
-    if (req.body.year !== undefined) updateData.year = req.body.year ? parseInt(req.body.year) : undefined;
-    if (req.body.condition !== undefined) updateData.condition = req.body.condition;
-    if (req.body.price !== undefined) updateData.price = req.body.price ? parseInt(req.body.price) : undefined;
-    if (req.body.location !== undefined) updateData.location = req.body.location;
-    if (req.body.fuelType !== undefined) updateData.engineType = req.body.fuelType;
-    if (req.body.transmission !== undefined) updateData.transmission = req.body.transmission;
-    if (req.body.mileage !== undefined) updateData.mileage = req.body.mileage ? parseInt(req.body.mileage) : undefined;
-    if (req.body.bodyType !== undefined) updateData.bodyType = req.body.bodyType;
+    if (req.body.year !== undefined)
+      updateData.year = req.body.year ? parseInt(req.body.year) : undefined;
+    if (req.body.condition !== undefined)
+      updateData.condition = req.body.condition;
+    if (req.body.price !== undefined)
+      updateData.price = req.body.price ? parseInt(req.body.price) : undefined;
+    if (req.body.location !== undefined)
+      updateData.location = req.body.location;
+    if (req.body.fuelType !== undefined)
+      updateData.engineType = req.body.fuelType;
+    if (req.body.transmission !== undefined)
+      updateData.transmission = req.body.transmission;
+    if (req.body.mileage !== undefined)
+      updateData.mileage = req.body.mileage
+        ? parseInt(req.body.mileage)
+        : undefined;
+    if (req.body.bodyType !== undefined)
+      updateData.bodyType = req.body.bodyType;
     if (req.body.color !== undefined) updateData.color = req.body.color;
-    if (req.body.ownershipHistory !== undefined) updateData.ownershipHistory = req.body.ownershipHistory;
-    if (req.body.verifiedSeller !== undefined) updateData.verifiedSeller = req.body.verifiedSeller === 'true';
+    if (req.body.ownershipHistory !== undefined)
+      updateData.ownershipHistory = req.body.ownershipHistory;
+    if (req.body.verifiedSeller !== undefined)
+      updateData.verifiedSeller = req.body.verifiedSeller === "true";
     if (req.body.engine !== undefined) updateData.engine = req.body.engine;
     if (req.body.status !== undefined) updateData.status = req.body.status;
     if (req.body.features !== undefined) {
@@ -141,23 +168,26 @@ exports.updateCar = async (req, res) => {
       let processedFeatures = [];
       if (Array.isArray(req.body.features)) {
         processedFeatures = req.body.features;
-      } else if (typeof req.body.features === 'string') {
-        processedFeatures = req.body.features.split(',').map(f => f.trim()).filter(f => f);
+      } else if (typeof req.body.features === "string") {
+        processedFeatures = req.body.features
+          .split(",")
+          .map((f) => f.trim())
+          .filter((f) => f);
       }
       updateData.features = processedFeatures;
     }
 
-    const updatedCar = await Car.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { new: true }
-    );
+    const updatedCar = await Car.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+    });
 
     if (!updatedCar) return res.status(404).json({ message: "Car not found" });
     res.json(updatedCar);
   } catch (error) {
-    console.error('Error updating car:', error);
-    res.status(500).json({ message: 'Failed to update car', error: error.message });
+    console.error("Error updating car:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to update car", error: error.message });
   }
 };
 

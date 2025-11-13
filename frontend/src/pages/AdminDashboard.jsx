@@ -177,7 +177,7 @@ const AdminDashboard = () => {
                 <div className="relative">
                   <button className="flex items-center space-x-2">
                     <img
-                      src="https://via.placeholder.com/40x40"
+                      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='%23ffffff'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23374151'/%3E%3Ctext x='20' y='25' text-anchor='middle' fill='%23ffffff' font-family='Arial' font-size='18'%3EA%3C/text%3E%3C/svg%3E"
                       alt="Admin"
                       className="w-8 h-8 rounded-full"
                     />

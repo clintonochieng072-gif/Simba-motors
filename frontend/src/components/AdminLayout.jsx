@@ -155,7 +155,7 @@ const AdminLayout = () => {
               {/* User Profile */}
               <div className="flex items-center gap-2 md:gap-3">
                 <img
-                  src="https://via.placeholder.com/32x32"
+                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='%23ffffff'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23374151'/%3E%3Ctext x='16' y='20' text-anchor='middle' fill='%23ffffff' font-family='Arial' font-size='16'%3EA%3C/text%3E%3C/svg%3E"
                   alt="Admin"
                   className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-neutral-700"
                 />

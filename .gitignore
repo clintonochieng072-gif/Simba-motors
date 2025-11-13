@@ -20,8 +20,6 @@ backend/*.log
 frontend/build/
 frontend/dist/
 
-# Render deployment
-render.yaml
 
 # IDE and editor files
 .vscode/

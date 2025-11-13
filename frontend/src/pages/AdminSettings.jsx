@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import {
   FaCog,
@@ -12,6 +13,8 @@ import {
 } from "react-icons/fa";
 
 const AdminSettings = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [feeStructure, setFeeStructure] = useState({
     dealerCommission: 5,
     individualCommission: 8,
@@ -46,7 +49,8 @@ const AdminSettings = () => {
     if (savedContent) setContentPages(JSON.parse(savedContent));
 
     const savedNotifications = localStorage.getItem("notificationSettings");
-    if (savedNotifications) setNotificationSettings(JSON.parse(savedNotifications));
+    if (savedNotifications)
+      setNotificationSettings(JSON.parse(savedNotifications));
 
     const savedAppearance = localStorage.getItem("appearanceSettings");
     if (savedAppearance) setAppearanceSettings(JSON.parse(savedAppearance));
@@ -77,9 +81,29 @@ const AdminSettings = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem("notificationSettings", JSON.stringify(notificationSettings));
-    localStorage.setItem("appearanceSettings", JSON.stringify(appearanceSettings));
+    localStorage.setItem(
+      "notificationSettings",
+      JSON.stringify(notificationSettings)
+    );
+    localStorage.setItem(
+      "appearanceSettings",
+      JSON.stringify(appearanceSettings)
+    );
   }, [notificationSettings, appearanceSettings]);
+
+  // Handle back button navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      // When back button is pressed on settings page, navigate to overview
+      navigate("/admin/dashboard/overview", { replace: true });
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
 
   const settingsSections = [
     {
@@ -87,9 +111,17 @@ const AdminSettings = () => {
       description: "Manage your admin profile and account information.",
       icon: FaUser,
       items: [
-        { label: "Personal Information", status: "Not configured", type: "info" },
+        {
+          label: "Personal Information",
+          status: "Not configured",
+          type: "info",
+        },
         { label: "Change Password", status: "Secure", type: "action" },
-        { label: "Two-Factor Authentication", status: "Disabled", type: "toggle" },
+        {
+          label: "Two-Factor Authentication",
+          status: "Disabled",
+          type: "toggle",
+        },
       ],
     },
     {
@@ -117,9 +149,24 @@ const AdminSettings = () => {
       description: "Customize the admin dashboard appearance.",
       icon: FaPalette,
       items: [
-        { label: "Theme", key: "theme", options: ["Light mode", "Dark mode"], type: "select" },
-        { label: "Language", key: "language", options: ["English", "Swahili"], type: "select" },
-        { label: "Timezone", key: "timezone", options: ["EAT (UTC+3)", "UTC+0"], type: "select" },
+        {
+          label: "Theme",
+          key: "theme",
+          options: ["Light mode", "Dark mode"],
+          type: "select",
+        },
+        {
+          label: "Language",
+          key: "language",
+          options: ["English", "Swahili"],
+          type: "select",
+        },
+        {
+          label: "Timezone",
+          key: "timezone",
+          options: ["EAT (UTC+3)", "UTC+0"],
+          type: "select",
+        },
       ],
     },
   ];
@@ -173,18 +220,28 @@ const AdminSettings = () => {
                         <button
                           onClick={() => handleNotificationToggle(item.key)}
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            (item.key === "email" ? notificationSettings.email :
-                             item.key === "push" ? notificationSettings.push :
-                             notificationSettings.orderAlerts)
-                              ? "bg-blue-600" : "bg-gray-200"
+                            (
+                              item.key === "email"
+                                ? notificationSettings.email
+                                : item.key === "push"
+                                ? notificationSettings.push
+                                : notificationSettings.orderAlerts
+                            )
+                              ? "bg-blue-600"
+                              : "bg-gray-200"
                           }`}
                         >
                           <span
                             className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                              (item.key === "email" ? notificationSettings.email :
-                               item.key === "push" ? notificationSettings.push :
-                               notificationSettings.orderAlerts)
-                                ? "translate-x-6" : "translate-x-1"
+                              (
+                                item.key === "email"
+                                  ? notificationSettings.email
+                                  : item.key === "push"
+                                  ? notificationSettings.push
+                                  : notificationSettings.orderAlerts
+                              )
+                                ? "translate-x-6"
+                                : "translate-x-1"
                             }`}
                           />
                         </button>
@@ -192,11 +249,15 @@ const AdminSettings = () => {
                       {item.type === "select" && item.key && (
                         <select
                           value={appearanceSettings[item.key]}
-                          onChange={(e) => handleAppearanceChange(item.key, e.target.value)}
+                          onChange={(e) =>
+                            handleAppearanceChange(item.key, e.target.value)
+                          }
                           className="text-sm border border-neutral-300 rounded px-2 py-1"
                         >
                           {item.options.map((option, idx) => (
-                            <option key={idx} value={option}>{option}</option>
+                            <option key={idx} value={option}>
+                              {option}
+                            </option>
                           ))}
                         </select>
                       )}

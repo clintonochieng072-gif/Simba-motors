@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { addCar } from "../utils/api";
 import { Button } from "../components/ui/Button";
 import { useToast } from "../contexts/ToastContext";
@@ -20,6 +20,7 @@ import {
 
 const AdminAddCar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -44,6 +45,20 @@ const AdminAddCar = () => {
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 30 }, (_, i) => currentYear - i);
+
+  // Handle back button navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      // When back button is pressed on add car page, navigate to cars list
+      navigate("/admin/dashboard/cars", { replace: true });
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

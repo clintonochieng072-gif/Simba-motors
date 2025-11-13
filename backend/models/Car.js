@@ -7,11 +7,11 @@ const carSchema = new mongoose.Schema({
   condition: { type: String, enum: ["New", "Used"] }, // Condition
   price: { type: Number }, // Price
   location: { type: String }, // Location/City
-  engineType: {
+  fuelType: {
     type: String,
     enum: ["Petrol", "Diesel", "Electric", "Hybrid"],
-  }, // Engine Type
-  transmission: { type: String, enum: ["Manual", "Automatic"] }, // Transmission
+  }, // Fuel Type
+  transmission: { type: String, enum: ["Manual", "Automatic", "CVT"] }, // Transmission
   mileage: { type: Number }, // Mileage (for used cars)
   bodyType: {
     type: String,

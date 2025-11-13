@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "../contexts/ToastContext";
 import {
   FaPlus,
@@ -24,6 +24,7 @@ import { Button } from "../components/ui/Button";
 const AdminCarEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -53,6 +54,21 @@ const AdminCarEdit = () => {
   useEffect(() => {
     fetchCar();
   }, [id]);
+
+  // Handle back button navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      // When back button is pressed on edit page, navigate to cars list
+      // This prevents cycling between pages and ensures proper back navigation
+      navigate("/admin/dashboard/cars", { replace: true });
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
 
   const fetchCar = async () => {
     try {
@@ -106,7 +122,15 @@ const AdminCarEdit = () => {
 
     // Only append changed fields
     Object.keys(formData).forEach((key) => {
-      if (formData[key] !== originalData[key]) {
+      let hasChanged = false;
+      if (key === "features") {
+        // For arrays like features, compare JSON strings
+        hasChanged = JSON.stringify(formData[key]) !== JSON.stringify(originalData[key]);
+      } else {
+        hasChanged = formData[key] !== originalData[key];
+      }
+
+      if (hasChanged) {
         if (key === "features") {
           // Features is sent as array JSON string
           carData.append(key, JSON.stringify(formData[key]));

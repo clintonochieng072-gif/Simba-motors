@@ -60,6 +60,28 @@ const AdminLayout = () => {
     navigate("/admin");
   };
 
+  // Handle back button navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      // Prevent page loops by ensuring we're navigating properly
+      // This effect runs when the user presses the browser back button
+      const currentPath = location.pathname;
+      const adminBasePath = "/admin/dashboard";
+
+      // If we're in admin area and back button is pressed, navigate to overview
+      if (currentPath.startsWith(adminBasePath) && currentPath !== `${adminBasePath}/overview`) {
+        // Use replace to prevent history stacking issues
+        navigate(`${adminBasePath}/overview`, { replace: true });
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [location, navigate]);
+
   return (
     <>
       <div className="flex h-screen bg-neutral-50">

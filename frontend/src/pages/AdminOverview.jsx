@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   LineChart,
   Line,
@@ -27,6 +27,7 @@ import { getCars } from "../utils/api";
 
 const AdminOverview = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [cars, setCars] = useState([]);
   const [stats, setStats] = useState({
     totalActiveListings: 0,
@@ -38,6 +39,24 @@ const AdminOverview = () => {
   useEffect(() => {
     fetchCars();
   }, []);
+
+  // Handle back button navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      // If overview is the current page and back button is pressed,
+      // navigate to admin login (logout behavior)
+      if (location.pathname === "/admin/dashboard/overview") {
+        // Optional: could navigate to a different page or handle as needed
+        // For now, we'll let the default browser behavior handle it
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [location]);
 
   const fetchCars = async () => {
     try {

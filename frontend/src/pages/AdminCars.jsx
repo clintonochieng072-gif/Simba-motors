@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import {
   FaPlus,
@@ -21,6 +21,7 @@ import { Button } from "../components/ui/Button";
 
 const AdminCars = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [cars, setCars] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -59,6 +60,25 @@ const AdminCars = () => {
   useEffect(() => {
     fetchCars();
   }, []);
+
+  // Handle back button navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      // If user presses back on edit page, navigate back to cars list
+      if (
+        location.pathname.includes("/cars/") &&
+        location.pathname !== "/admin/dashboard/cars"
+      ) {
+        navigate("/admin/dashboard/cars", { replace: true });
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [location, navigate]);
 
   const fetchCars = async () => {
     try {

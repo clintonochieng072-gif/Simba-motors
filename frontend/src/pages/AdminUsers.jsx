@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   FaUser,
   FaEnvelope,
@@ -15,9 +16,24 @@ import {
 } from "react-icons/fa";
 
 const AdminUsers = () => {
+  const location = useLocation();
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
+
+  // Handle back button navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      // When back button is pressed on users page, navigate to overview
+      navigate("/admin/dashboard/overview", { replace: true });
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   // Mock data - replace with actual API calls
   useEffect(() => {

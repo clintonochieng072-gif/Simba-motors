@@ -1,0 +1,536 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { addCar } from "../utils/api";
+import { Button } from "../components/ui/Button";
+import {
+  FaPlus,
+  FaTimes,
+  FaEye,
+  FaUpload,
+  FaCar,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaGasPump,
+  FaCogs,
+  FaTachometerAlt,
+  FaPalette,
+} from "react-icons/fa";
+
+const AdminAddCar = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    model: "",
+    year: "",
+    condition: "",
+    price: "",
+    location: "",
+    engineType: "",
+    transmission: "",
+    mileage: "",
+    bodyType: "",
+    color: "",
+    features: "",
+    ownershipHistory: "",
+    status: "Published",
+  });
+  const [images, setImages] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 30 }, (_, i) => currentYear - i);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    const validImages = files.filter((file) => file.type.startsWith("image/"));
+
+    if (validImages.length !== files.length) {
+      alert("Please select only image files");
+      return;
+    }
+
+    setImages(validImages);
+
+    // Create preview URLs
+    const previews = validImages.map((file) => URL.createObjectURL(file));
+    setPreviewImages(previews);
+  };
+
+  const removeImage = (index) => {
+    const newImages = images.filter((_, i) => i !== index);
+    const newPreviews = previewImages.filter((_, i) => i !== index);
+    setImages(newImages);
+    setPreviewImages(newPreviews);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const token = localStorage.getItem("adminToken");
+    const carData = new FormData();
+
+    // Only append non-empty fields
+    Object.keys(formData).forEach((key) => {
+      if (
+        formData[key] !== "" &&
+        formData[key] !== null &&
+        formData[key] !== undefined
+      ) {
+        carData.append(key, formData[key]);
+      }
+    });
+
+    images.forEach((image) => carData.append("images", image));
+
+    try {
+      await addCar(carData, token);
+      alert("Car added successfully!");
+      navigate("/admin/dashboard/cars");
+    } catch (error) {
+      console.error("Error adding car:", error);
+      alert("Error adding car. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePreview = () => {
+    setShowPreview(true);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      <div className="bg-white rounded-xl shadow-soft border border-neutral-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-heading font-bold text-neutral-800 flex items-center gap-3">
+            <FaPlus className="text-primary-600" />
+            Add New Car
+          </h1>
+          <Button
+            onClick={handlePreview}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <FaEye size={16} />
+            Preview
+          </Button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Basic Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Car Make/Brand *
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="e.g., Toyota"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Car Model *
+              </label>
+              <input
+                type="text"
+                name="model"
+                value={formData.model}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="e.g., Prado"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Year of Manufacture
+              </label>
+              <select
+                name="year"
+                value={formData.year}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              >
+                <option value="">Select Year</option>
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Condition
+              </label>
+              <select
+                name="condition"
+                value={formData.condition}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              >
+                <option value="">Select Condition</option>
+                <option value="New">New</option>
+                <option value="Used">Used</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Price (KSh)
+              </label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="e.g., 2500000"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Location/City
+              </label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="e.g., Nairobi"
+              />
+            </div>
+          </div>
+
+          {/* Technical Details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Engine Type
+              </label>
+              <select
+                name="engineType"
+                value={formData.engineType}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              >
+                <option value="">Select Engine Type</option>
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel">Diesel</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Transmission
+              </label>
+              <select
+                name="transmission"
+                value={formData.transmission}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              >
+                <option value="">Select Transmission</option>
+                <option value="Manual">Manual</option>
+                <option value="Automatic">Automatic</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Mileage (km)
+              </label>
+              <input
+                type="number"
+                name="mileage"
+                value={formData.mileage}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="e.g., 50000"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Body Type
+              </label>
+              <select
+                name="bodyType"
+                value={formData.bodyType}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              >
+                <option value="">Select Body Type</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Coupe">Coupe</option>
+                <option value="Convertible">Convertible</option>
+                <option value="Wagon">Wagon</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Van">Van</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Exterior Color
+              </label>
+              <input
+                type="text"
+                name="color"
+                value={formData.color}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="e.g., White"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
+                Status
+              </label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              >
+                <option value="Published">Published</option>
+                <option value="Draft">Draft</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Features
+            </label>
+            <textarea
+              name="features"
+              value={formData.features}
+              onChange={handleInputChange}
+              className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              placeholder="e.g., Air Conditioning, ABS Brakes, Leather Seats (comma separated)"
+              rows="3"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Ownership History
+            </label>
+            <textarea
+              name="ownershipHistory"
+              value={formData.ownershipHistory}
+              onChange={handleInputChange}
+              className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              placeholder="Describe the ownership history..."
+              rows="3"
+            />
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Photos (At least 1 main image) *
+            </label>
+            <div
+              className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center hover:border-primary-500 transition-colors cursor-pointer"
+              onClick={() => document.getElementById("image-upload").click()}
+            >
+              <FaUpload className="mx-auto text-neutral-400 text-3xl mb-4" />
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                id="image-upload"
+                required={images.length === 0}
+              />
+              <div className="text-primary-600 hover:text-primary-700 font-medium">
+                Click to upload images
+              </div>
+              <p className="text-sm text-neutral-500 mt-2">
+                PNG, JPG, GIF up to 10MB each
+              </p>
+            </div>
+            {previewImages.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                {previewImages.map((preview, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={preview}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-24 object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                    >
+                      <FaTimes size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex space-x-4 pt-6 border-t border-neutral-200">
+            <Button
+              type="button"
+              onClick={() => navigate("/admin/dashboard/cars")}
+              className="bg-gray-600 hover:bg-gray-700 text-white flex items-center gap-2"
+            >
+              <FaTimes size={16} />
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+            >
+              <FaPlus size={16} />
+              {isSubmitting ? "Saving..." : "Save Car"}
+            </Button>
+          </div>
+        </form>
+      </div>
+
+      {/* Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-heading font-bold text-neutral-800">
+                  Preview
+                </h2>
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="text-neutral-400 hover:text-neutral-600"
+                >
+                  <FaTimes size={20} />
+                </button>
+              </div>
+              <div className="space-y-4">
+                {previewImages.length > 0 && (
+                  <img
+                    src={previewImages[0]}
+                    alt="Car preview"
+                    className="w-full h-48 object-cover rounded-lg"
+                  />
+                )}
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  {formData.name && (
+                    <div>
+                      <span className="font-medium">Make:</span> {formData.name}
+                    </div>
+                  )}
+                  {formData.model && (
+                    <div>
+                      <span className="font-medium">Model:</span>{" "}
+                      {formData.model}
+                    </div>
+                  )}
+                  {formData.year && (
+                    <div>
+                      <span className="font-medium">Year:</span> {formData.year}
+                    </div>
+                  )}
+                  {formData.condition && (
+                    <div>
+                      <span className="font-medium">Condition:</span>{" "}
+                      {formData.condition}
+                    </div>
+                  )}
+                  {formData.price && (
+                    <div>
+                      <span className="font-medium">Price:</span> KSh{" "}
+                      {formData.price.toLocaleString()}
+                    </div>
+                  )}
+                  {formData.location && (
+                    <div>
+                      <span className="font-medium">Location:</span>{" "}
+                      {formData.location}
+                    </div>
+                  )}
+                  {formData.engineType && (
+                    <div>
+                      <span className="font-medium">Engine:</span>{" "}
+                      {formData.engineType}
+                    </div>
+                  )}
+                  {formData.transmission && (
+                    <div>
+                      <span className="font-medium">Transmission:</span>{" "}
+                      {formData.transmission}
+                    </div>
+                  )}
+                  {formData.mileage && (
+                    <div>
+                      <span className="font-medium">Mileage:</span>{" "}
+                      {formData.mileage} km
+                    </div>
+                  )}
+                  {formData.bodyType && (
+                    <div>
+                      <span className="font-medium">Body Type:</span>{" "}
+                      {formData.bodyType}
+                    </div>
+                  )}
+                  {formData.color && (
+                    <div>
+                      <span className="font-medium">Color:</span>{" "}
+                      {formData.color}
+                    </div>
+                  )}
+                  {formData.features && (
+                    <div>
+                      <span className="font-medium">Features:</span>{" "}
+                      {formData.features}
+                    </div>
+                  )}
+                  {formData.ownershipHistory && (
+                    <div>
+                      <span className="font-medium">Ownership History:</span>{" "}
+                      {formData.ownershipHistory}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminAddCar;

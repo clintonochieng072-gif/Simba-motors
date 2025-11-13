@@ -94,7 +94,24 @@ const AdminCars = () => {
     e.preventDefault();
     const token = localStorage.getItem("adminToken");
     const carData = new FormData();
-    Object.keys(formData).forEach((key) => carData.append(key, formData[key]));
+
+    // Only append non-empty fields
+    Object.keys(formData).forEach((key) => {
+      if (
+        formData[key] !== "" &&
+        formData[key] !== null &&
+        formData[key] !== undefined &&
+        (!Array.isArray(formData[key]) || formData[key].length > 0)
+      ) {
+        if (Array.isArray(formData[key])) {
+          // For arrays like features, append as JSON string
+          carData.append(key, JSON.stringify(formData[key]));
+        } else {
+          carData.append(key, formData[key]);
+        }
+      }
+    });
+
     images.forEach((image) => carData.append("images", image));
 
     try {
@@ -106,7 +123,6 @@ const AdminCars = () => {
       console.error("Error saving car:", error);
     }
   };
-
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this car?")) {
       const token = localStorage.getItem("adminToken");

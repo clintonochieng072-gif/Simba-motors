@@ -2,25 +2,40 @@ import React, { useState, useEffect } from "react";
 import CarCard from "./CarCard";
 import Filters from "./Filters";
 import { getCars } from "../utils/api";
+import { FaSync } from "react-icons/fa";
 
 const CarList = ({ searchTerm }) => {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchCars = async () => {
+    try {
+      const response = await getCars();
+      setCars(response.data.cars);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        const response = await getCars();
-        setCars(response.data.cars);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchCars();
+
+    // Poll for updates every 30 seconds
+    const interval = setInterval(fetchCars, 30000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchCars();
+  };
   const [filters, setFilters] = useState({
     priceMin: "",
     priceMax: "",
@@ -78,9 +93,19 @@ const CarList = ({ searchTerm }) => {
   return (
     <div className="bg-gradient-to-br from-gray-50 to-white p-4 md:p-8 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6 lg:mb-8 text-gray-800 text-center">
-          Available Cars
-        </h2>
+        <div className="flex items-center justify-center mb-4 md:mb-6 lg:mb-8">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-800 text-center">
+            Available Cars
+          </h2>
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="ml-4 p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white disabled:bg-blue-300 transition-colors"
+            title="Refresh cars list"
+          >
+            <FaSync className={`text-sm ${refreshing ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
         <Filters
           filters={filters}
           setFilters={setFilters}

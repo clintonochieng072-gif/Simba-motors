@@ -144,8 +144,11 @@ const AdminCarEdit = () => {
     images.forEach((image) => carData.append("images", image));
 
     try {
-      await updateCar(id, carData, token);
+      const updatedCar = await updateCar(id, carData, token);
       showSuccess("Car updated successfully!");
+      // Update local state with the updated data
+      setFormData(updatedCar);
+      setOriginalData(updatedCar);
       setTimeout(() => navigate("/admin/dashboard/cars"), 1000);
     } catch (error) {
       console.error("Error updating car:", error);

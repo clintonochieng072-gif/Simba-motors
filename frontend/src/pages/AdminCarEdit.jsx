@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useToast } from "../contexts/ToastContext";
 import {
   FaPlus,
   FaEdit,
@@ -22,6 +23,7 @@ import { Button } from "../components/ui/Button";
 const AdminCarEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     model: "",
@@ -43,6 +45,9 @@ const AdminCarEdit = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isToggling, setIsToggling] = useState(false);
 
   useEffect(() => {
     fetchCar();
@@ -64,6 +69,7 @@ const AdminCarEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsUpdating(true);
     const token = localStorage.getItem("adminToken");
     const carData = new FormData();
 
@@ -84,35 +90,46 @@ const AdminCarEdit = () => {
 
     try {
       await updateCar(id, carData, token);
-      navigate("/admin/dashboard/cars");
+      showSuccess("Car updated successfully!");
+      setTimeout(() => navigate("/admin/dashboard/cars"), 1000);
     } catch (error) {
       console.error("Error updating car:", error);
-      setError("Failed to update car");
+      showError("Failed to update car");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this car?")) {
+      setIsDeleting(true);
       const token = localStorage.getItem("adminToken");
       try {
         await deleteCar(id, token);
-        navigate("/admin/dashboard/cars");
+        showSuccess("Car deleted successfully!");
+        setTimeout(() => navigate("/admin/dashboard/cars"), 1000);
       } catch (error) {
         console.error("Error deleting car:", error);
-        setError("Failed to delete car");
+        showError("Failed to delete car");
+      } finally {
+        setIsDeleting(false);
       }
     }
   };
 
   const handleStatusToggle = async () => {
+    setIsToggling(true);
     const token = localStorage.getItem("adminToken");
     const newStatus = formData.status === "Published" ? "Draft" : "Published";
     try {
       await updateCar(id, { ...formData, status: newStatus }, token);
       setFormData({ ...formData, status: newStatus });
+      showSuccess(`Car ${newStatus.toLowerCase()} successfully!`);
     } catch (error) {
       console.error("Error updating car status:", error);
-      setError("Failed to update status");
+      showError("Failed to update status");
+    } finally {
+      setIsToggling(false);
     }
   };
 
@@ -157,6 +174,7 @@ const AdminCarEdit = () => {
         <div className="flex items-center gap-4">
           <Button
             onClick={handleStatusToggle}
+            loading={isToggling}
             className={`flex items-center gap-2 ${formData.status === "Published" ? "bg-green-600 hover:bg-green-700" : "bg-yellow-600 hover:bg-yellow-700"} text-white`}
           >
             {formData.status === "Published" ? (
@@ -173,6 +191,7 @@ const AdminCarEdit = () => {
           </Button>
           <Button
             onClick={handleDelete}
+            loading={isDeleting}
             className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2"
           >
             <FaTrash size={16} />
@@ -440,7 +459,7 @@ const AdminCarEdit = () => {
           </div>
 
           <div className="flex space-x-3">
-            <Button type="submit" className="bg-blue-900 hover:bg-blue-800 text-white flex items-center gap-2">
+            <Button type="submit" loading={isUpdating} className="bg-blue-900 hover:bg-blue-800 text-white flex items-center gap-2">
               <FaEdit size={16} />
               Update Car
             </Button>

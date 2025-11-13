@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addCar } from "../utils/api";
 import { Button } from "../components/ui/Button";
+import { useToast } from "../contexts/ToastContext";
 import {
   FaPlus,
   FaTimes,
@@ -18,6 +19,7 @@ import {
 
 const AdminAddCar = () => {
   const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     model: "",
@@ -92,11 +94,11 @@ const AdminAddCar = () => {
 
     try {
       await addCar(carData, token);
-      alert("Car added successfully!");
-      navigate("/admin/dashboard/cars");
+      showSuccess("Car added successfully!");
+      setTimeout(() => navigate("/admin/dashboard/cars"), 1000);
     } catch (error) {
       console.error("Error adding car:", error);
-      alert("Error adding car. Please try again.");
+      showError("Failed to add car. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -412,11 +414,11 @@ const AdminAddCar = () => {
             </Button>
             <Button
               type="submit"
-              disabled={isSubmitting}
+              loading={isSubmitting}
               className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
             >
               <FaPlus size={16} />
-              {isSubmitting ? "Saving..." : "Save Car"}
+              Save Car
             </Button>
           </div>
         </form>
@@ -431,12 +433,14 @@ const AdminAddCar = () => {
                 <h2 className="text-xl font-heading font-bold text-neutral-800">
                   Preview
                 </h2>
-                <button
+                <Button
                   onClick={() => setShowPreview(false)}
+                  variant="ghost"
+                  size="icon"
                   className="text-neutral-400 hover:text-neutral-600"
                 >
                   <FaTimes size={20} />
-                </button>
+                </Button>
               </div>
               <div className="space-y-4">
                 {previewImages.length > 0 && (

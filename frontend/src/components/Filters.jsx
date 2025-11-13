@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "./ui/Button";
 
 const Filters = ({
   filters,
@@ -66,14 +67,14 @@ const Filters = ({
           <option value="Electric">Electric</option>
           <option value="Hybrid">Hybrid</option>
         </select>
-        <button
+        <Button
           onClick={onFilter}
-          className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform hover:scale-105 shadow-lg font-semibold"
+          className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl shadow-lg font-semibold"
         >
           Filter
-        </button>
+        </Button>
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}

@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../utils/api";
+import { Button } from "../components/ui/Button";
+import { useToast } from "../contexts/ToastContext";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
@@ -19,13 +23,20 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
     try {
       const response = await login(credentials);
       localStorage.setItem("adminToken", response.data.token);
+      showSuccess("Login successful! Redirecting to dashboard...");
       // Redirect to admin dashboard
-      navigate("/admin/dashboard");
+      setTimeout(() => navigate("/admin/dashboard"), 1000);
     } catch (err) {
       setError("Invalid credentials");
+      showError("Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -70,12 +81,13 @@ const AdminLogin = () => {
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <div>
-            <button
+            <Button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              loading={isLoading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
             >
               Sign in
-            </button>
+            </Button>
           </div>
         </form>
       </div>

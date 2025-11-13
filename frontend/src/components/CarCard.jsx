@@ -88,14 +88,16 @@ export default function CarCard({ car }) {
               <h4 className="font-semibold text-gray-700 mb-2">
                 Key Features:
               </h4>
-              <ul className="features-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
+              <div className="flex flex-wrap gap-1">
                 {car.features.map((feature, index) => (
-                  <li key={index} className="flex items-center text-sm">
-                    <span className="text-green-600 mr-1">✓</span>
+                  <span
+                    key={index}
+                    className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+                  >
                     {feature}
-                  </li>
+                  </span>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
           {car.bodyType && (

@@ -16,6 +16,7 @@ import {
   FaToggleOff,
   FaFilter,
   FaArrowLeft,
+  FaTag,
 } from "react-icons/fa";
 import { getCar, updateCar, deleteCar } from "../utils/api";
 import { Button } from "../components/ui/Button";
@@ -35,7 +36,7 @@ const AdminCarEdit = () => {
     engine: "",
     color: "",
     ownershipHistory: "",
-    features: "",
+    features: [],
     verifiedSeller: false,
     status: "Published",
     price: "",
@@ -56,7 +57,10 @@ const AdminCarEdit = () => {
   const fetchCar = async () => {
     try {
       const response = await getCar(id);
-      const carData = { ...response.data, features: response.data.features ? response.data.features.join(', ') : '' };
+      const carData = {
+        ...response.data,
+        features: response.data.features || [],
+      };
       setFormData(carData);
       setOriginalData(carData);
       setLoading(false);
@@ -76,9 +80,9 @@ const AdminCarEdit = () => {
     // Only append changed fields
     Object.keys(formData).forEach((key) => {
       if (formData[key] !== originalData[key]) {
-        if (key === 'features') {
-          // Features is sent as string, backend splits it
-          carData.append(key, formData[key]);
+        if (key === "features") {
+          // Features is sent as array JSON string
+          carData.append(key, JSON.stringify(formData[key]));
         } else {
           carData.append(key, formData[key]);
         }
@@ -175,7 +179,11 @@ const AdminCarEdit = () => {
           <Button
             onClick={handleStatusToggle}
             loading={isToggling}
-            className={`flex items-center gap-2 ${formData.status === "Published" ? "bg-green-600 hover:bg-green-700" : "bg-yellow-600 hover:bg-yellow-700"} text-white`}
+            className={`flex items-center gap-2 ${
+              formData.status === "Published"
+                ? "bg-green-600 hover:bg-green-700"
+                : "bg-yellow-600 hover:bg-yellow-700"
+            } text-white`}
           >
             {formData.status === "Published" ? (
               <>
@@ -393,18 +401,37 @@ const AdminCarEdit = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
+              <FaTag className="text-primary-600" />
               Features
             </label>
-            <textarea
-              placeholder="e.g., Air Conditioning, ABS Brakes, Leather Seats (comma separated)"
-              value={formData.features}
-              onChange={(e) =>
-                setFormData({ ...formData, features: e.target.value })
-              }
-              className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-              rows="3"
-            />
+            <div className="mb-3">
+              <input
+                type="text"
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="Type a feature and press Enter (e.g., Air Conditioning)"
+                onKeyPress={handleFeatureKeyPress}
+              />
+            </div>
+            {formData.features.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {formData.features.map((feature, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm"
+                  >
+                    {feature}
+                    <button
+                      type="button"
+                      onClick={() => handleFeatureRemove(index)}
+                      className="text-primary-600 hover:text-primary-800"
+                    >
+                      <FaTimes size={12} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-6">
@@ -459,7 +486,11 @@ const AdminCarEdit = () => {
           </div>
 
           <div className="flex space-x-3">
-            <Button type="submit" loading={isUpdating} className="bg-blue-900 hover:bg-blue-800 text-white flex items-center gap-2">
+            <Button
+              type="submit"
+              loading={isUpdating}
+              className="bg-blue-900 hover:bg-blue-800 text-white flex items-center gap-2"
+            >
               <FaEdit size={16} />
               Update Car
             </Button>

@@ -15,6 +15,7 @@ import {
   FaCogs,
   FaTachometerAlt,
   FaPalette,
+  FaTag,
 } from "react-icons/fa";
 
 const AdminAddCar = () => {
@@ -32,7 +33,7 @@ const AdminAddCar = () => {
     mileage: "",
     bodyType: "",
     color: "",
-    features: "",
+    features: [],
     ownershipHistory: "",
     status: "Published",
   });
@@ -47,6 +48,33 @@ const AdminAddCar = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFeatureAdd = (feature) => {
+    if (feature.trim() && !formData.features.includes(feature.trim())) {
+      setFormData({
+        ...formData,
+        features: [...formData.features, feature.trim()],
+      });
+    }
+  };
+
+  const handleFeatureRemove = (index) => {
+    setFormData({
+      ...formData,
+      features: formData.features.filter((_, i) => i !== index),
+    });
+  };
+
+  const handleFeatureKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const feature = e.target.value.trim();
+      if (feature) {
+        handleFeatureAdd(feature);
+        e.target.value = "";
+      }
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -84,9 +112,15 @@ const AdminAddCar = () => {
       if (
         formData[key] !== "" &&
         formData[key] !== null &&
-        formData[key] !== undefined
+        formData[key] !== undefined &&
+        formData[key] !== []
       ) {
-        carData.append(key, formData[key]);
+        if (Array.isArray(formData[key])) {
+          // For arrays like features, append as JSON string
+          carData.append(key, JSON.stringify(formData[key]));
+        } else {
+          carData.append(key, formData[key]);
+        }
       }
     });
 
@@ -327,17 +361,37 @@ const AdminAddCar = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
+              <FaTag className="text-primary-600" />
               Features
             </label>
-            <textarea
-              name="features"
-              value={formData.features}
-              onChange={handleInputChange}
-              className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-              placeholder="e.g., Air Conditioning, ABS Brakes, Leather Seats (comma separated)"
-              rows="3"
-            />
+            <div className="mb-3">
+              <input
+                type="text"
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="Type a feature and press Enter (e.g., Air Conditioning)"
+                onKeyPress={handleFeatureKeyPress}
+              />
+            </div>
+            {formData.features.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {formData.features.map((feature, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm"
+                  >
+                    {feature}
+                    <button
+                      type="button"
+                      onClick={() => handleFeatureRemove(index)}
+                      className="text-primary-600 hover:text-primary-800"
+                    >
+                      <FaTimes size={12} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>
@@ -515,10 +569,19 @@ const AdminAddCar = () => {
                       {formData.color}
                     </div>
                   )}
-                  {formData.features && (
-                    <div>
-                      <span className="font-medium">Features:</span>{" "}
-                      {formData.features}
+                  {formData.features.length > 0 && (
+                    <div className="col-span-2">
+                      <span className="font-medium">Features:</span>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {formData.features.map((feature, index) => (
+                          <span
+                            key={index}
+                            className="bg-primary-100 text-primary-800 px-2 py-1 rounded text-xs"
+                          >
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
                   {formData.ownershipHistory && (

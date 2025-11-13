@@ -73,7 +73,6 @@ const CarDetail = () => {
 
   return (
     <>
-
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <div className="bg-white shadow-sm">
@@ -212,6 +211,21 @@ const CarDetail = () => {
                     {car.ownershipHistory}
                   </p>
                 </div>
+                {car.features && car.features.length > 0 && (
+                  <div className="mt-4">
+                    <h3 className="font-medium text-gray-900 mb-2">Features</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {car.features.map((feature, index) => (
+                        <span
+                          key={index}
+                          className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Contact Buttons */}

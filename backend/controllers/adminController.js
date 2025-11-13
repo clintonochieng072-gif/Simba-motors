@@ -59,6 +59,7 @@ exports.addCar = async (req, res) => {
       verifiedSeller,
       engine,
       status,
+      features,
     } = req.body;
     let images = [];
 
@@ -67,6 +68,14 @@ exports.addCar = async (req, res) => {
         const result = await cloudinary.uploader.upload(file.path);
         images.push(result.secure_url);
       }
+    }
+
+    // Handle features: if it's a string, split into array; otherwise use as array
+    let processedFeatures = [];
+    if (Array.isArray(features)) {
+      processedFeatures = features;
+    } else if (typeof features === 'string') {
+      processedFeatures = features.split(',').map(f => f.trim()).filter(f => f);
     }
 
     const car = new Car({
@@ -84,7 +93,7 @@ exports.addCar = async (req, res) => {
       ownershipHistory,
       verifiedSeller: verifiedSeller === 'true',
       engine,
-      features: req.body.features ? req.body.features.split(',').map(f => f.trim()).filter(f => f) : [],
+      features: processedFeatures,
       status: status || "Published",
       images,
     });
@@ -126,7 +135,16 @@ exports.updateCar = async (req, res) => {
     if (req.body.verifiedSeller !== undefined) updateData.verifiedSeller = req.body.verifiedSeller === 'true';
     if (req.body.engine !== undefined) updateData.engine = req.body.engine;
     if (req.body.status !== undefined) updateData.status = req.body.status;
-    if (req.body.features !== undefined) updateData.features = req.body.features ? req.body.features.split(',').map(f => f.trim()).filter(f => f) : [];
+    if (req.body.features !== undefined) {
+      // Handle features: if it's a string, split into array; otherwise use as array
+      let processedFeatures = [];
+      if (Array.isArray(req.body.features)) {
+        processedFeatures = req.body.features;
+      } else if (typeof req.body.features === 'string') {
+        processedFeatures = req.body.features.split(',').map(f => f.trim()).filter(f => f);
+      }
+      updateData.features = processedFeatures;
+    }
 
     const updatedCar = await Car.findByIdAndUpdate(
       req.params.id,

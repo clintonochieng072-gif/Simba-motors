@@ -71,6 +71,33 @@ const AdminCarEdit = () => {
     }
   };
 
+  const handleFeatureAdd = (feature) => {
+    if (feature.trim() && !formData.features.includes(feature.trim())) {
+      setFormData({
+        ...formData,
+        features: [...formData.features, feature.trim()],
+      });
+    }
+  };
+
+  const handleFeatureKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const feature = e.target.value.trim();
+      if (feature) {
+        handleFeatureAdd(feature);
+        e.target.value = "";
+      }
+    }
+  };
+
+  const handleFeatureRemove = (index) => {
+    setFormData({
+      ...formData,
+      features: formData.features.filter((_, i) => i !== index),
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsUpdating(true);

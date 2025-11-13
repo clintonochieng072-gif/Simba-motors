@@ -101,7 +101,8 @@ exports.addCar = async (req, res) => {
     const savedCar = await car.save();
     res.status(201).json(savedCar);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error adding car:', error);
+    res.status(500).json({ message: 'Failed to add car', error: error.message });
   }
 };
 
@@ -155,7 +156,8 @@ exports.updateCar = async (req, res) => {
     if (!updatedCar) return res.status(404).json({ message: "Car not found" });
     res.json(updatedCar);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error updating car:', error);
+    res.status(500).json({ message: 'Failed to update car', error: error.message });
   }
 };
 

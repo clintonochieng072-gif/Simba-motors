@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: simba-motors-backend
+    name: simba-cars
     env: node
     rootDir: backend
     buildCommand: npm install

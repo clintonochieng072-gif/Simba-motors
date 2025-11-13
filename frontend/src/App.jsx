@@ -1,47 +1,51 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PublicLayout from "./components/PublicLayout.jsx";
-import Home from "./pages/Home.jsx";
-import CarDetail from "./pages/CarDetail.jsx";
-import About from "./pages/About.jsx";
-import Contact from "./pages/Contact.jsx";
-import Services from "./pages/Services.jsx";
-import AdminLogin from "./pages/AdminLogin.jsx";
-import AdminLayout from "./components/AdminLayout.jsx";
-import AdminOverview from "./pages/AdminOverview.jsx";
-import AdminCars from "./pages/AdminCars.jsx";
-import AdminAddCar from "./pages/AdminAddCar.jsx";
-import AdminCarEdit from "./pages/AdminCarEdit.jsx";
-import AdminUsers from "./pages/AdminUsers.jsx";
-import AdminSettings from "./pages/AdminSettings.jsx";
+
+// Lazy load pages for code splitting
+const Home = lazy(() => import("./pages/Home.jsx"));
+const CarDetail = lazy(() => import("./pages/CarDetail.jsx"));
+const About = lazy(() => import("./pages/About.jsx"));
+const Contact = lazy(() => import("./pages/Contact.jsx"));
+const Services = lazy(() => import("./pages/Services.jsx"));
+const AdminLogin = lazy(() => import("./pages/AdminLogin.jsx"));
+const AdminLayout = lazy(() => import("./components/AdminLayout.jsx"));
+const AdminOverview = lazy(() => import("./pages/AdminOverview.jsx"));
+const AdminCars = lazy(() => import("./pages/AdminCars.jsx"));
+const AdminAddCar = lazy(() => import("./pages/AdminAddCar.jsx"));
+const AdminCarEdit = lazy(() => import("./pages/AdminCarEdit.jsx"));
+const AdminUsers = lazy(() => import("./pages/AdminUsers.jsx"));
+const AdminSettings = lazy(() => import("./pages/AdminSettings.jsx"));
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<PublicLayout />}>
-            <Route index element={<Home />} />
-            <Route path="about" element={<About />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="services" element={<Services />} />
-          </Route>
-          <Route path="/cars/:id" element={<CarDetail />} />
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<PublicLayout />}>
+              <Route index element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="contact" element={<Contact />} />
+              <Route path="services" element={<Services />} />
+            </Route>
+            <Route path="/cars/:id" element={<CarDetail />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin/dashboard" element={<AdminLayout />}>
-            <Route index element={<AdminOverview />} />
-            <Route path="add-car" element={<AdminAddCar />} />
-            <Route path="overview" element={<AdminOverview />} />
-            <Route path="cars" element={<AdminCars />} />
-            <Route path="cars/:id" element={<AdminCarEdit />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Route>
-<Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/*" element={<AdminLogin />} />
-        </Routes>
+            {/* Admin Routes */}
+            <Route path="/admin/dashboard" element={<AdminLayout />}>
+              <Route index element={<AdminOverview />} />
+              <Route path="add-car" element={<AdminAddCar />} />
+              <Route path="overview" element={<AdminOverview />} />
+              <Route path="cars" element={<AdminCars />} />
+              <Route path="cars/:id" element={<AdminCarEdit />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/*" element={<AdminLogin />} />
+          </Routes>
+        </Suspense>
       </div>
     </Router>
   );

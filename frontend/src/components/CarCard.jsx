@@ -17,9 +17,9 @@ export default function CarCard({ car }) {
       car.color ? `Color: ${car.color}` : ""
     }\n\nPlease provide more details.`;
 
-    const whatsappUrl = `https://wa.me/254700000000?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/254717510255?text=${encodeURIComponent(
       message
-    )}`; // Replace with actual WhatsApp number
+    )}`;
     window.open(whatsappUrl, "_blank");
   };
 
@@ -30,6 +30,7 @@ export default function CarCard({ car }) {
           src={car.images?.[0] || car.image || "/placeholder-car.jpg"}
           alt={`${car.name || "Car"} ${car.model || ""}`}
           className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
       </div>

@@ -3,7 +3,7 @@ import SearchBar from "./SearchBar";
 
 const Hero = ({ onSearch }) => {
   return (
-    <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-20 px-6 text-center overflow-hidden">
+    <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-16 md:py-20 px-4 md:px-6 text-center overflow-hidden">
       {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-20"
@@ -17,10 +17,10 @@ const Hero = ({ onSearch }) => {
       <div className="absolute bottom-10 right-10 w-32 h-32 bg-blue-400/20 rounded-full blur-2xl animate-pulse delay-1000"></div>
 
       <div className="container mx-auto relative z-10">
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent drop-shadow-2xl">
+        <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold mb-4 md:mb-6 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent drop-shadow-2xl">
           Find Your Dream Car at Simba Motors
         </h1>
-        <p className="text-xl md:text-2xl mb-8 text-blue-100 font-light tracking-wide">
+        <p className="text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 text-blue-100 font-light tracking-wide">
           Located on Eldoret Kisumu Road · Quality Vehicles at Unbeatable Prices
         </p>
         <div className="transform hover:scale-105 transition-all duration-500">

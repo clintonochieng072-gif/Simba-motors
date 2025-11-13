@@ -76,9 +76,9 @@ const CarList = ({ searchTerm }) => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white p-8 min-h-screen">
+    <div className="bg-gradient-to-br from-gray-50 to-white p-4 md:p-8 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold mb-8 text-gray-800 text-center">
+        <h2 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8 text-gray-800 text-center">
           Available Cars
         </h2>
         <Filters

@@ -77,13 +77,17 @@ exports.addCar = async (req, res) => {
 
     // Handle features: if it's a string, split into array; otherwise use as array
     let processedFeatures = [];
-    if (Array.isArray(features)) {
+    if (features === undefined || features === null) {
+      processedFeatures = [];
+    } else if (Array.isArray(features)) {
       processedFeatures = features;
     } else if (typeof features === "string") {
       processedFeatures = features
         .split(",")
         .map((f) => f.trim())
         .filter((f) => f);
+    } else {
+      processedFeatures = [];
     }
 
     const car = new Car({

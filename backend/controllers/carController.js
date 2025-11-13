@@ -57,8 +57,14 @@ exports.getCars = async (req, res) => {
       .skip(skip)
       .limit(limitNum);
 
+    // Ensure features is always an array
+    const processedCars = cars.map(car => ({
+      ...car.toObject(),
+      features: car.features || []
+    }));
+
     res.json({
-      cars,
+      cars: processedCars,
       pagination: {
         currentPage: pageNum,
         totalPages: Math.ceil(totalCars / limitNum),
@@ -77,7 +83,14 @@ exports.getCar = async (req, res) => {
   try {
     const car = await Car.findById(req.params.id);
     if (!car) return res.status(404).json({ message: "Car not found" });
-    res.json(car);
+
+    // Ensure features is always an array
+    const processedCar = {
+      ...car.toObject(),
+      features: car.features || []
+    };
+
+    res.json(processedCar);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

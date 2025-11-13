@@ -388,7 +388,7 @@ const AdminAddCar = () => {
                 onKeyPress={handleFeatureKeyPress}
               />
             </div>
-            {formData.features.length > 0 && (
+            {formData.features && formData.features.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {formData.features.map((feature, index) => (
                   <span
@@ -584,7 +584,7 @@ const AdminAddCar = () => {
                       {formData.color}
                     </div>
                   )}
-                  {formData.features.length > 0 && (
+                  {formData.features && formData.features.length > 0 && (
                     <div className="col-span-2">
                       <span className="font-medium">Features:</span>
                       <div className="flex flex-wrap gap-1 mt-1">

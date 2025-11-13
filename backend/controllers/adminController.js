@@ -34,7 +34,12 @@ exports.getDashboardStats = async (req, res) => {
 exports.getAllCars = async (req, res) => {
   try {
     const cars = await Car.find();
-    res.json(cars);
+    // Ensure features is always an array
+    const processedCars = cars.map(car => ({
+      ...car.toObject(),
+      features: car.features || []
+    }));
+    res.json(processedCars);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -111,7 +116,12 @@ exports.addCar = async (req, res) => {
     });
 
     const savedCar = await car.save();
-    res.status(201).json(savedCar);
+    // Ensure features is always an array in response
+    const processedCar = {
+      ...savedCar.toObject(),
+      features: savedCar.features || []
+    };
+    res.status(201).json(processedCar);
   } catch (error) {
     console.error("Error adding car:", error);
     res
@@ -186,7 +196,12 @@ exports.updateCar = async (req, res) => {
     });
 
     if (!updatedCar) return res.status(404).json({ message: "Car not found" });
-    res.json(updatedCar);
+    // Ensure features is always an array in response
+    const processedCar = {
+      ...updatedCar.toObject(),
+      features: updatedCar.features || []
+    };
+    res.json(processedCar);
   } catch (error) {
     console.error("Error updating car:", error);
     res

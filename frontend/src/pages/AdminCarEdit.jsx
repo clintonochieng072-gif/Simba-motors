@@ -467,7 +467,7 @@ const AdminCarEdit = () => {
                 onKeyPress={handleFeatureKeyPress}
               />
             </div>
-            {formData.features.length > 0 && (
+            {formData.features && formData.features.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {formData.features.map((feature, index) => (
                   <span

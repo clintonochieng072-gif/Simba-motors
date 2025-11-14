@@ -170,8 +170,8 @@ const AdminAddCar = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-      <div className="bg-white rounded-xl shadow-soft border border-neutral-200 p-4 sm:p-6">
+    <div className="max-w-6xl mx-auto">
+      <div className="bg-white rounded-xl shadow-soft border border-neutral-200 p-4 sm:p-6 lg:p-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-heading font-bold text-neutral-800 flex items-center gap-3">
             <FaPlus className="text-primary-600" />
@@ -400,9 +400,9 @@ const AdminAddCar = () => {
                 onKeyPress={handleFeatureKeyPress}
               />
             </div>
-            {formData.features && formData.features.length > 0 && (
+            {(formData.features || []).length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {formData.features.map((feature, index) => (
+                {(formData.features || []).map((feature, index) => (
                   <span
                     key={index}
                     className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
@@ -596,11 +596,11 @@ const AdminAddCar = () => {
                       {formData.color}
                     </div>
                   )}
-                  {formData.features && formData.features.length > 0 && (
+                  {(formData.features || []).length > 0 && (
                     <div className="col-span-2">
                       <span className="font-medium">Features:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {formData.features.map((feature, index) => (
+                        {(formData.features || []).map((feature, index) => (
                           <span
                             key={index}
                             className="bg-primary-100 text-primary-800 px-2 py-1 rounded text-xs"

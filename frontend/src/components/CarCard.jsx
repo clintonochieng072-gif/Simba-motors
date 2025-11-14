@@ -83,13 +83,13 @@ export default function CarCard({ car }) {
               Transmission: {car.transmission}
             </p>
           )}
-          {car.features && car.features.length > 0 && (
+          {(car.features || []).length > 0 && (
             <div className="mt-2">
               <h4 className="font-semibold text-gray-700 mb-2">
                 Key Features:
               </h4>
               <div className="flex flex-wrap gap-1">
-                {car.features.map((feature, index) => (
+                {(car.features || []).map((feature, index) => (
                   <span
                     key={index}
                     className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"

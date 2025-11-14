@@ -20,7 +20,7 @@ const AdminLayout = () => {
 
   const decodeToken = (token) => {
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = JSON.parse(atob(token.split(".")[1]));
       return payload;
     } catch {
       return null;
@@ -69,16 +69,19 @@ const AdminLayout = () => {
       const adminBasePath = "/admin/dashboard";
 
       // If we're in admin area and back button is pressed, navigate to overview
-      if (currentPath.startsWith(adminBasePath) && currentPath !== `${adminBasePath}/overview`) {
+      if (
+        currentPath.startsWith(adminBasePath) &&
+        currentPath !== `${adminBasePath}/overview`
+      ) {
         // Use replace to prevent history stacking issues
         navigate(`${adminBasePath}/overview`, { replace: true });
       }
     };
 
-    window.addEventListener('popstate', handlePopState);
+    window.addEventListener("popstate", handlePopState);
 
     return () => {
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, [location, navigate]);
 
@@ -87,7 +90,7 @@ const AdminLayout = () => {
       <div className="flex h-screen bg-neutral-50">
         {/* Sidebar */}
         <div
-          className={`bg-neutral-900 shadow-xl border-r border-neutral-700 w-full md:w-64 transition-transform duration-300 md:relative md:translate-x-0 ${
+          className={`bg-neutral-900 shadow-xl border-r border-neutral-700 w-full md:w-64 transition-transform duration-300 md:relative md:translate-x-0 h-full ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           } fixed inset-y-0 left-0 z-50 md:flex-shrink-0`}
         >
@@ -140,9 +143,9 @@ const AdminLayout = () => {
         )}
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col md:ml-0">
+        <div className="flex-1 flex flex-col md:ml-0 overflow-hidden">
           {/* Top Navigation Bar */}
-          <header className="bg-neutral-900 border-b border-neutral-700 px-4 md:px-6 py-4 flex items-center justify-between">
+          <header className="bg-neutral-900 border-b border-neutral-700 px-4 md:px-6 py-4 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-2 md:gap-4">
               {/* Hamburger Menu for Mobile */}
               <button
@@ -179,16 +182,18 @@ const AdminLayout = () => {
                 <img
                   src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='%23ffffff'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23374151'/%3E%3Ctext x='16' y='20' text-anchor='middle' fill='%23ffffff' font-family='Arial' font-size='16'%3EA%3C/text%3E%3C/svg%3E"
                   alt="Admin"
-                  className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-neutral-700"
+                  className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-neutral-700 flex-shrink-0"
                 />
-                <span className="text-neutral-200 font-medium text-sm md:text-base hidden sm:inline">Admin</span>
+                <span className="text-neutral-200 font-medium text-sm md:text-base hidden sm:inline">
+                  Admin
+                </span>
               </div>
             </div>
           </header>
 
           {/* Page Content */}
-          <div className="flex-1 overflow-auto bg-white">
-            <div className="p-4 md:p-6">
+          <div className="flex-1 overflow-auto bg-neutral-50">
+            <div className="p-4 md:p-6 lg:p-8">
               <Outlet />
             </div>
           </div>

@@ -52,7 +52,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("adminToken");
       const response = await getAllCars(token);
-      setCars(response?.cars || []);
+      setCars(response?.cars || (Array.isArray(response) ? response : []));
     } catch (error) {
       console.error("Error fetching cars:", error);
       setCars([]);

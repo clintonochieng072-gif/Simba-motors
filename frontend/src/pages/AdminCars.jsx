@@ -17,7 +17,13 @@ import {
   FaFilter,
   FaTag,
 } from "react-icons/fa";
-import { getCars, addCar, updateCar, deleteCar, getAllCars } from "../utils/api";
+import {
+  getCars,
+  addCar,
+  updateCar,
+  deleteCar,
+  getAllCars,
+} from "../utils/api";
 import { Button } from "../components/ui/Button";
 
 const AdminCars = () => {
@@ -112,7 +118,7 @@ const AdminCars = () => {
     try {
       const token = localStorage.getItem("adminToken");
       const response = await getAllCars(token);
-      setCars(response?.cars || []);
+      setCars(response?.cars || (Array.isArray(response) ? response : []));
     } catch (error) {
       console.error("Error fetching cars:", error);
       setCars([]);

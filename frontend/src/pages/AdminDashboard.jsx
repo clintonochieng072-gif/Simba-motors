@@ -13,7 +13,13 @@ import {
   FaMapMarkerAlt,
   FaTachometerAlt,
 } from "react-icons/fa";
-import { getCars, addCar, updateCar, deleteCar, getAllCars } from "../utils/api";
+import {
+  getCars,
+  addCar,
+  updateCar,
+  deleteCar,
+  getAllCars,
+} from "../utils/api";
 
 const AdminDashboard = () => {
   const [cars, setCars] = useState([]);
@@ -46,7 +52,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem("adminToken");
       const response = await getAllCars(token);
-      setCars(Array.isArray(response) ? response : []);
+      setCars(response?.cars || []);
     } catch (error) {
       console.error("Error fetching cars:", error);
       setCars([]);
@@ -216,7 +222,7 @@ const AdminDashboard = () => {
                     </svg>
                   </span>
                 </div>
-                <p className="text-2xl font-bold mt-4">{cars.length}</p>
+                <p className="text-2xl font-bold mt-4">{cars?.length || 0}</p>
                 <p className="text-gray-600 text-sm mt-2">
                   +12% from last month
                 </p>
@@ -311,7 +317,7 @@ const AdminDashboard = () => {
               </div>
               <div className="p-6 bg-gray-50 rounded-b-lg">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {cars.map((car) => (
+                  {(cars || []).map((car) => (
                     <div
                       key={car._id}
                       className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow"

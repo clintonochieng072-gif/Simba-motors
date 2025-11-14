@@ -112,9 +112,7 @@ const AdminCars = () => {
     try {
       const token = localStorage.getItem("adminToken");
       const response = await getAllCars(token);
-      setCars(Array.isArray(response) ? response : []);
-      // Force re-render by updating state
-      setCars((prev) => [...prev]);
+      setCars(response?.cars || []);
     } catch (error) {
       console.error("Error fetching cars:", error);
       setCars([]);

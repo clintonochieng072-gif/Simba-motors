@@ -97,7 +97,7 @@ const CarDetail = () => {
                     car.images?.[currentImageIndex] || "/placeholder-car.jpg"
                   }
                   alt={`${car.name} ${car.model}`}
-                  className="w-full h-96 object-cover"
+                  className="w-full h-64 sm:h-80 md:h-96 object-contain bg-gray-50"
                 />
               </div>
               {car.images && car.images.length > 1 && (

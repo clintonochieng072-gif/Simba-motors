@@ -170,8 +170,8 @@ const AdminAddCar = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-xl shadow-soft border border-neutral-200 p-6">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+      <div className="bg-white rounded-xl shadow-soft border border-neutral-200 p-4 sm:p-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-heading font-bold text-neutral-800 flex items-center gap-3">
             <FaPlus className="text-primary-600" />
@@ -189,7 +189,7 @@ const AdminAddCar = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Car Make/Brand *
@@ -199,7 +199,7 @@ const AdminAddCar = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                 placeholder="e.g., Toyota"
               />
             </div>
@@ -212,13 +212,13 @@ const AdminAddCar = () => {
                 name="model"
                 value={formData.model}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                 placeholder="e.g., Prado"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Year of Manufacture
@@ -227,7 +227,7 @@ const AdminAddCar = () => {
                 name="year"
                 value={formData.year}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="">Select Year</option>
                 {years.map((year) => (
@@ -245,7 +245,7 @@ const AdminAddCar = () => {
                 name="condition"
                 value={formData.condition}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="">Select Condition</option>
                 <option value="New">New</option>
@@ -254,7 +254,7 @@ const AdminAddCar = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Price (KSh)
@@ -264,7 +264,7 @@ const AdminAddCar = () => {
                 name="price"
                 value={formData.price}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                 placeholder="e.g., 2500000"
               />
             </div>
@@ -277,14 +277,14 @@ const AdminAddCar = () => {
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                 placeholder="e.g., Nairobi"
               />
             </div>
           </div>
 
           {/* Technical Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Engine Type
@@ -293,7 +293,7 @@ const AdminAddCar = () => {
                 name="engineType"
                 value={formData.engineType}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="">Select Engine Type</option>
                 <option value="Petrol">Petrol</option>
@@ -310,7 +310,7 @@ const AdminAddCar = () => {
                 name="transmission"
                 value={formData.transmission}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="">Select Transmission</option>
                 <option value="Manual">Manual</option>
@@ -319,7 +319,7 @@ const AdminAddCar = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Mileage (km)
@@ -329,7 +329,7 @@ const AdminAddCar = () => {
                 name="mileage"
                 value={formData.mileage}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                 placeholder="e.g., 50000"
               />
             </div>
@@ -341,7 +341,7 @@ const AdminAddCar = () => {
                 name="bodyType"
                 value={formData.bodyType}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="">Select Body Type</option>
                 <option value="Sedan">Sedan</option>
@@ -357,7 +357,7 @@ const AdminAddCar = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 Exterior Color
@@ -367,7 +367,7 @@ const AdminAddCar = () => {
                 name="color"
                 value={formData.color}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                 placeholder="e.g., White"
               />
             </div>
@@ -379,7 +379,7 @@ const AdminAddCar = () => {
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="Published">Published</option>
                 <option value="Draft">Draft</option>
@@ -395,7 +395,7 @@ const AdminAddCar = () => {
             <div className="mb-3">
               <input
                 type="text"
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                 placeholder="Type a feature and press Enter (e.g., Air Conditioning)"
                 onKeyPress={handleFeatureKeyPress}
               />
@@ -405,7 +405,7 @@ const AdminAddCar = () => {
                 {formData.features.map((feature, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm"
+                    className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
                   >
                     {feature}
                     <button
@@ -429,7 +429,7 @@ const AdminAddCar = () => {
               name="ownershipHistory"
               value={formData.ownershipHistory}
               onChange={handleInputChange}
-              className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               placeholder="Describe the ownership history..."
               rows="3"
             />
@@ -441,10 +441,10 @@ const AdminAddCar = () => {
               Photos (At least 1 main image) *
             </label>
             <label
-              className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center hover:border-primary-500 transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 rounded-lg p-4 sm:p-6 text-center hover:border-primary-500 transition-colors cursor-pointer"
               onClick={() => document.getElementById("image-upload").click()}
             >
-              <FaUpload className="mx-auto text-neutral-400 text-3xl mb-4" />
+              <FaUpload className="mx-auto text-neutral-400 text-2xl sm:text-3xl mb-4" />
               <input
                 type="file"
                 multiple
@@ -454,7 +454,7 @@ const AdminAddCar = () => {
                 id="image-upload"
                 required={images.length === 0}
               />
-              <div className="text-primary-600 hover:text-primary-700 font-medium">
+              <div className="text-primary-600 hover:text-primary-700 font-medium text-sm sm:text-base">
                 Click to upload images
               </div>
               <p className="text-sm text-neutral-500 mt-2">
@@ -462,20 +462,20 @@ const AdminAddCar = () => {
               </p>
             </label>
             {previewImages.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mt-4">
                 {previewImages.map((preview, index) => (
                   <div key={index} className="relative">
                     <img
                       src={preview}
                       alt={`Preview ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg"
+                      className="w-full h-20 sm:h-24 object-cover rounded-lg"
                     />
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
                     >
-                      <FaTimes size={12} />
+                      <FaTimes size={10} />
                     </button>
                   </div>
                 ))}
@@ -484,11 +484,11 @@ const AdminAddCar = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex space-x-4 pt-6 border-t border-neutral-200">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6 border-t border-neutral-200">
             <Button
               type="button"
               onClick={() => navigate("/admin/dashboard/cars")}
-              className="bg-gray-600 hover:bg-gray-700 text-white flex items-center gap-2"
+              className="bg-gray-600 hover:bg-gray-700 text-white flex items-center justify-center gap-2 order-2 sm:order-1"
             >
               <FaTimes size={16} />
               Cancel
@@ -496,7 +496,7 @@ const AdminAddCar = () => {
             <Button
               type="submit"
               loading={isSubmitting}
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+              className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 order-1 sm:order-2"
             >
               <FaPlus size={16} />
               Save Car

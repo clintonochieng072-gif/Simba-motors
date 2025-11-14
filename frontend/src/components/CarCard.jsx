@@ -42,7 +42,7 @@ export default function CarCard({ car }) {
         <img
           src={car.images?.[0] || car.image || "/placeholder-car.jpg"}
           alt={`${car.name || "Car"} ${car.model || ""}`}
-          className="w-full h-40 md:h-48 object-cover transition-transform duration-300 hover:scale-110"
+          className="w-full h-48 sm:h-56 md:h-48 lg:h-52 object-contain bg-gray-50 transition-transform duration-300 hover:scale-105"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>

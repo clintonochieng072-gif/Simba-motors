@@ -90,8 +90,11 @@ const AdminCarEdit = () => {
   };
 
   const handleFeatureAdd = (feature) => {
-    if (feature.trim() && !formDataRef.current.features.includes(feature.trim())) {
-      setFormData(prev => {
+    if (
+      feature.trim() &&
+      !formDataRef.current.features.includes(feature.trim())
+    ) {
+      setFormData((prev) => {
         const newData = {
           ...prev,
           features: [...prev.features, feature.trim()],
@@ -114,7 +117,7 @@ const AdminCarEdit = () => {
   };
 
   const handleFeatureRemove = (index) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       const newData = {
         ...prev,
         features: prev.features.filter((_, i) => i !== index),
@@ -135,7 +138,9 @@ const AdminCarEdit = () => {
       let hasChanged = false;
       if (key === "features") {
         // For arrays like features, compare JSON strings
-        hasChanged = JSON.stringify(formDataRef.current[key]) !== JSON.stringify(originalData[key]);
+        hasChanged =
+          JSON.stringify(formDataRef.current[key]) !==
+          JSON.stringify(originalData[key]);
       } else {
         hasChanged = formDataRef.current[key] !== originalData[key];
       }
@@ -219,9 +224,9 @@ const AdminCarEdit = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
         <div className="flex items-center gap-4">
           <Button
             onClick={() => navigate("/admin/dashboard/cars")}
@@ -232,19 +237,19 @@ const AdminCarEdit = () => {
             Back to Cars
           </Button>
           <div>
-            <h1 className="text-3xl font-heading font-bold text-neutral-800">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold text-neutral-800">
               Edit Car
             </h1>
-            <p className="text-neutral-600 mt-1">
+            <p className="text-neutral-600 mt-1 text-sm sm:text-base">
               Update car details and manage listing.
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <Button
             onClick={handleStatusToggle}
             loading={isToggling}
-            className={`flex items-center gap-2 ${
+            className={`flex items-center gap-2 text-sm ${
               formData.status === "Published"
                 ? "bg-green-600 hover:bg-green-700"
                 : "bg-yellow-600 hover:bg-yellow-700"
@@ -265,7 +270,7 @@ const AdminCarEdit = () => {
           <Button
             onClick={handleDelete}
             loading={isDeleting}
-            className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2"
+            className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2 text-sm"
           >
             <FaTrash size={16} />
             Delete
@@ -274,9 +279,9 @@ const AdminCarEdit = () => {
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-xl shadow-soft border border-neutral-200 p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="bg-white rounded-xl shadow-soft border border-neutral-200 p-4 sm:p-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-4">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Make *
@@ -288,7 +293,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
             <div>
@@ -302,7 +307,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, model: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
             <div>
@@ -316,7 +321,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, year: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
             <div>
@@ -330,7 +335,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, mileage: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
             <div>
@@ -342,7 +347,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, fuelType: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               >
                 <option value="">Select Fuel Type</option>
                 <option value="Petrol">Petrol</option>
@@ -360,7 +365,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, transmission: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               >
                 <option value="">Select Transmission</option>
                 <option value="Manual">Manual</option>
@@ -377,7 +382,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, bodyType: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               >
                 <option value="">Select Body Type</option>
                 <option value="Sedan">Sedan</option>
@@ -400,7 +405,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, engine: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
             <div>
@@ -414,7 +419,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, color: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
             <div>
@@ -428,7 +433,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, price: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
             <div>
@@ -442,7 +447,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, location: e.target.value })
                 }
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
@@ -460,7 +465,7 @@ const AdminCarEdit = () => {
                   ownershipHistory: e.target.value,
                 })
               }
-              className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               rows="3"
             />
           </div>
@@ -473,7 +478,7 @@ const AdminCarEdit = () => {
             <div className="mb-3">
               <input
                 type="text"
-                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
                 placeholder="Type a feature and press Enter (e.g., Air Conditioning)"
                 onKeyPress={handleFeatureKeyPress}
               />
@@ -483,7 +488,7 @@ const AdminCarEdit = () => {
                 {formData.features.map((feature, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm"
+                    className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
                   >
                     {feature}
                     <button
@@ -499,7 +504,7 @@ const AdminCarEdit = () => {
             )}
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -514,7 +519,7 @@ const AdminCarEdit = () => {
               />
               <span className="text-sm text-neutral-700">Verified Seller</span>
             </label>
-            <div>
+            <div className="w-full sm:w-auto">
               <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Status
               </label>
@@ -523,7 +528,7 @@ const AdminCarEdit = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, status: e.target.value })
                 }
-                className="p-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                className="w-full sm:w-auto p-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               >
                 <option value="Published">Published</option>
                 <option value="Draft">Draft</option>
@@ -541,7 +546,7 @@ const AdminCarEdit = () => {
               multiple
               accept="image/*"
               onChange={(e) => setImages([...e.target.files])}
-              className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+              className="w-full p-2 sm:p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
             />
             {images.length > 0 && (
               <p className="text-sm text-neutral-600 mt-2">
@@ -550,11 +555,11 @@ const AdminCarEdit = () => {
             )}
           </div>
 
-          <div className="flex space-x-3">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-x-3">
             <Button
               type="submit"
               loading={isUpdating}
-              className="bg-blue-900 hover:bg-blue-800 text-white flex items-center gap-2"
+              className="bg-blue-900 hover:bg-blue-800 text-white flex items-center justify-center gap-2 order-1 sm:order-1"
             >
               <FaEdit size={16} />
               Update Car
@@ -562,7 +567,7 @@ const AdminCarEdit = () => {
             <Button
               type="button"
               onClick={() => navigate("/admin/dashboard/cars")}
-              className="bg-gray-600 hover:bg-gray-700 text-white flex items-center gap-2"
+              className="bg-gray-600 hover:bg-gray-700 text-white flex items-center justify-center gap-2 order-2 sm:order-2"
             >
               <FaTimes size={16} />
               Cancel

@@ -15,8 +15,8 @@ router.use(verifyToken);
 
 router.get("/dashboard", getDashboardStats);
 router.get("/cars", getAllCars);
-router.post("/cars", upload.array("images", 10), addCar);
-router.put("/cars/:id", upload.array("images", 10), updateCar);
+router.post("/cars", upload.any(), addCar);
+router.put("/cars/:id", upload.any(), updateCar);
 router.delete("/cars/:id", deleteCar);
 
 module.exports = router;

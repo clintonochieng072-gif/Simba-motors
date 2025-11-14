@@ -15,6 +15,7 @@ import {
   FaToggleOn,
   FaToggleOff,
   FaFilter,
+  FaTag,
 } from "react-icons/fa";
 import { getCars, addCar, updateCar, deleteCar } from "../utils/api";
 import { Button } from "../components/ui/Button";
@@ -36,7 +37,7 @@ const AdminCars = () => {
     mileage: "",
     bodyType: "",
     color: "",
-    features: "",
+    features: [],
     status: "Published",
   });
   const [images, setImages] = useState([]);
@@ -61,6 +62,33 @@ const AdminCars = () => {
     fetchCars();
   }, []);
 
+  const handleFeatureAdd = (feature) => {
+    if (feature.trim() && !formData.features.includes(feature.trim())) {
+      setFormData({
+        ...formData,
+        features: [...formData.features, feature.trim()],
+      });
+    }
+  };
+
+  const handleFeatureRemove = (index) => {
+    setFormData({
+      ...formData,
+      features: formData.features.filter((_, i) => i !== index),
+    });
+  };
+
+  const handleFeatureKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const feature = e.target.value.trim();
+      if (feature) {
+        handleFeatureAdd(feature);
+        e.target.value = "";
+      }
+    }
+  };
+
   // Handle back button navigation
   useEffect(() => {
     const handlePopState = () => {
@@ -84,6 +112,8 @@ const AdminCars = () => {
     try {
       const response = await getCars();
       setCars(Array.isArray(response.data.cars) ? response.data.cars : []);
+      // Force re-render by updating state
+      setCars((prev) => [...prev]);
     } catch (error) {
       console.error("Error fetching cars:", error);
       setCars([]);
@@ -195,7 +225,7 @@ const AdminCars = () => {
       mileage: "",
       bodyType: "",
       color: "",
-      features: "",
+      features: [],
       status: "Published",
     });
     setImages([]);
@@ -797,19 +827,38 @@ const AdminCars = () => {
                 </div>
               </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-neutral-700 mb-1">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
+                  <FaTag className="text-primary-600" />
                   Features
                 </label>
-                <textarea
-                  placeholder="e.g., Air Conditioning, ABS Brakes, Leather Seats (comma separated)"
-                  value={formData.features}
-                  onChange={(e) =>
-                    setFormData({ ...formData, features: e.target.value })
-                  }
-                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-                  rows="3"
-                />
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                    placeholder="Type a feature and press Enter (e.g., Air Conditioning)"
+                    onKeyPress={handleFeatureKeyPress}
+                  />
+                </div>
+                {formData.features && formData.features.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {formData.features.map((feature, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm"
+                      >
+                        {feature}
+                        <button
+                          type="button"
+                          onClick={() => handleFeatureRemove(index)}
+                          className="text-primary-600 hover:text-primary-800"
+                        >
+                          <FaTimes size={12} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="mb-6">

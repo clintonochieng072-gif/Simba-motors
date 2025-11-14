@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { addCar } from "../utils/api";
 import { Button } from "../components/ui/Button";
@@ -42,6 +42,7 @@ const AdminAddCar = () => {
   const [previewImages, setPreviewImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const formDataRef = useRef(formData);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 30 }, (_, i) => currentYear - i);
@@ -66,18 +67,29 @@ const AdminAddCar = () => {
   };
 
   const handleFeatureAdd = (feature) => {
-    if (feature.trim() && !formData.features.includes(feature.trim())) {
-      setFormData({
-        ...formData,
-        features: [...formData.features, feature.trim()],
+    if (
+      feature.trim() &&
+      !formDataRef.current.features.includes(feature.trim())
+    ) {
+      setFormData((prev) => {
+        const newData = {
+          ...prev,
+          features: [...prev.features, feature.trim()],
+        };
+        formDataRef.current = newData;
+        return newData;
       });
     }
   };
 
   const handleFeatureRemove = (index) => {
-    setFormData({
-      ...formData,
-      features: formData.features.filter((_, i) => i !== index),
+    setFormData((prev) => {
+      const newData = {
+        ...prev,
+        features: prev.features.filter((_, i) => i !== index),
+      };
+      formDataRef.current = newData;
+      return newData;
     });
   };
 
@@ -123,18 +135,18 @@ const AdminAddCar = () => {
     const carData = new FormData();
 
     // Only append non-empty fields
-    Object.keys(formData).forEach((key) => {
+    Object.keys(formDataRef.current).forEach((key) => {
       if (
-        formData[key] !== "" &&
-        formData[key] !== null &&
-        formData[key] !== undefined &&
-        formData[key] !== []
+        formDataRef.current[key] !== "" &&
+        formDataRef.current[key] !== null &&
+        formDataRef.current[key] !== undefined &&
+        formDataRef.current[key] !== []
       ) {
-        if (Array.isArray(formData[key])) {
+        if (Array.isArray(formDataRef.current[key])) {
           // For arrays like features, append as JSON string
-          carData.append(key, JSON.stringify(formData[key]));
+          carData.append(key, JSON.stringify(formDataRef.current[key]));
         } else {
-          carData.append(key, formData[key]);
+          carData.append(key, formDataRef.current[key]);
         }
       }
     });
@@ -144,7 +156,7 @@ const AdminAddCar = () => {
     try {
       await addCar(carData, token);
       showSuccess("Car added successfully!");
-      setTimeout(() => navigate("/admin/dashboard/cars"), 1000);
+      setTimeout(() => (window.location.href = "/admin/dashboard/cars"), 1000);
     } catch (error) {
       console.error("Error adding car:", error);
       showError("Failed to add car. Please try again.");
@@ -428,7 +440,7 @@ const AdminAddCar = () => {
             <label className="block text-sm font-medium text-neutral-700 mb-2">
               Photos (At least 1 main image) *
             </label>
-            <div
+            <label
               className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center hover:border-primary-500 transition-colors cursor-pointer"
               onClick={() => document.getElementById("image-upload").click()}
             >
@@ -438,7 +450,7 @@ const AdminAddCar = () => {
                 multiple
                 accept="image/*"
                 onChange={handleImageUpload}
-                className="hidden"
+                className="visually-hidden"
                 id="image-upload"
                 required={images.length === 0}
               />
@@ -448,7 +460,7 @@ const AdminAddCar = () => {
               <p className="text-sm text-neutral-500 mt-2">
                 PNG, JPG, GIF up to 10MB each
               </p>
-            </div>
+            </label>
             {previewImages.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                 {previewImages.map((preview, index) => (

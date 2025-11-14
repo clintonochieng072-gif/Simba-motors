@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "../contexts/ToastContext";
 import {
@@ -50,6 +50,7 @@ const AdminCarEdit = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
+  const formDataRef = useRef(formData);
 
   useEffect(() => {
     fetchCar();
@@ -79,6 +80,7 @@ const AdminCarEdit = () => {
       };
       setFormData(carData);
       setOriginalData(carData);
+      formDataRef.current = carData;
       setLoading(false);
     } catch (error) {
       console.error("Error fetching car:", error);
@@ -88,10 +90,14 @@ const AdminCarEdit = () => {
   };
 
   const handleFeatureAdd = (feature) => {
-    if (feature.trim() && !formData.features.includes(feature.trim())) {
-      setFormData({
-        ...formData,
-        features: [...formData.features, feature.trim()],
+    if (feature.trim() && !formDataRef.current.features.includes(feature.trim())) {
+      setFormData(prev => {
+        const newData = {
+          ...prev,
+          features: [...prev.features, feature.trim()],
+        };
+        formDataRef.current = newData;
+        return newData;
       });
     }
   };
@@ -108,9 +114,13 @@ const AdminCarEdit = () => {
   };
 
   const handleFeatureRemove = (index) => {
-    setFormData({
-      ...formData,
-      features: formData.features.filter((_, i) => i !== index),
+    setFormData(prev => {
+      const newData = {
+        ...prev,
+        features: prev.features.filter((_, i) => i !== index),
+      };
+      formDataRef.current = newData;
+      return newData;
     });
   };
 
@@ -121,21 +131,21 @@ const AdminCarEdit = () => {
     const carData = new FormData();
 
     // Only append changed fields
-    Object.keys(formData).forEach((key) => {
+    Object.keys(formDataRef.current).forEach((key) => {
       let hasChanged = false;
       if (key === "features") {
         // For arrays like features, compare JSON strings
-        hasChanged = JSON.stringify(formData[key]) !== JSON.stringify(originalData[key]);
+        hasChanged = JSON.stringify(formDataRef.current[key]) !== JSON.stringify(originalData[key]);
       } else {
-        hasChanged = formData[key] !== originalData[key];
+        hasChanged = formDataRef.current[key] !== originalData[key];
       }
 
       if (hasChanged) {
         if (key === "features") {
           // Features is sent as array JSON string
-          carData.append(key, JSON.stringify(formData[key]));
+          carData.append(key, JSON.stringify(formDataRef.current[key]));
         } else {
-          carData.append(key, formData[key]);
+          carData.append(key, formDataRef.current[key]);
         }
       }
     });
@@ -149,6 +159,7 @@ const AdminCarEdit = () => {
       // Update local state with the updated data
       setFormData(updatedCar);
       setOriginalData(updatedCar);
+      formDataRef.current = updatedCar;
       setTimeout(() => navigate("/admin/dashboard/cars"), 1000);
     } catch (error) {
       console.error("Error updating car:", error);

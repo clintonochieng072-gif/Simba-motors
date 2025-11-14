@@ -68,8 +68,8 @@ exports.addCar = async (req, res) => {
     } = req.body;
     let images = [];
 
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
+    if (req.files && req.files.filter(f => f.fieldname === 'images').length > 0) {
+      for (const file of req.files.filter(f => f.fieldname === 'images')) {
         try {
           const result = await cloudinary.uploader.upload(file.path);
           images.push(result.secure_url);
@@ -80,17 +80,23 @@ exports.addCar = async (req, res) => {
       }
     }
 
-    // Handle features: if it's a string, split into array; otherwise use as array
+    // Handle features: if it's a string, try to parse as JSON first, then split by comma; otherwise use as array
     let processedFeatures = [];
     if (features === undefined || features === null) {
       processedFeatures = [];
     } else if (Array.isArray(features)) {
       processedFeatures = features;
     } else if (typeof features === "string") {
-      processedFeatures = features
-        .split(",")
-        .map((f) => f.trim())
-        .filter((f) => f);
+      try {
+        // Try to parse as JSON first (for FormData JSON strings)
+        processedFeatures = JSON.parse(features);
+      } catch {
+        // If not JSON, split by comma
+        processedFeatures = features
+          .split(",")
+          .map((f) => f.trim())
+          .filter((f) => f);
+      }
     } else {
       processedFeatures = [];
     }
@@ -133,11 +139,12 @@ exports.addCar = async (req, res) => {
 // Update car
 exports.updateCar = async (req, res) => {
   try {
+    console.log("Update car req.body:", req.body);
     const updateData = {};
     let images = req.body.images || [];
 
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
+    if (req.files && req.files.filter(f => f.fieldname === 'images').length > 0) {
+      for (const file of req.files.filter(f => f.fieldname === 'images')) {
         try {
           const result = await cloudinary.uploader.upload(file.path);
           images.push(result.secure_url);
@@ -178,15 +185,21 @@ exports.updateCar = async (req, res) => {
     if (req.body.engine !== undefined) updateData.engine = req.body.engine;
     if (req.body.status !== undefined) updateData.status = req.body.status;
     if (req.body.features !== undefined) {
-      // Handle features: if it's a string, split into array; otherwise use as array
+      // Handle features: if it's a string, try to parse as JSON first, then split by comma; otherwise use as array
       let processedFeatures = [];
       if (Array.isArray(req.body.features)) {
         processedFeatures = req.body.features;
       } else if (typeof req.body.features === "string") {
-        processedFeatures = req.body.features
-          .split(",")
-          .map((f) => f.trim())
-          .filter((f) => f);
+        try {
+          // Try to parse as JSON first (for FormData JSON strings)
+          processedFeatures = JSON.parse(req.body.features);
+        } catch {
+          // If not JSON, split by comma
+          processedFeatures = req.body.features
+            .split(",")
+            .map((f) => f.trim())
+            .filter((f) => f);
+        }
       }
       updateData.features = processedFeatures;
     }

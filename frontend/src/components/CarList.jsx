@@ -13,7 +13,7 @@ const CarList = ({ searchTerm }) => {
   const fetchCars = async () => {
     try {
       const response = await getCars();
-      setCars(response.data.cars);
+      setCars(response.cars || []);
       setError(null);
     } catch (err) {
       setError(err.message);

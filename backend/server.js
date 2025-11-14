@@ -14,7 +14,21 @@ const settingsRoutes = require("./routes/settings");
 const app = express();
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin:
+    process.env.NODE_ENV === "production"
+      ? "https://simba-motors.vercel.app"
+      : [
+          "http://localhost:3000",
+          "http://localhost:5000",
+          "http://127.0.0.1:3000",
+          "http://127.0.0.1:5000",
+        ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
 
 // MongoDB connection
 const mongoUri = process.env.MONGO_URI

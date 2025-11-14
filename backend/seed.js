@@ -262,14 +262,17 @@ const dummyCars = [
 
 async function seedDatabase() {
   try {
-    await mongoose.connect(
-      process.env.MONGO_URI || "mongodb://localhost:27017/simba-motors"
-    );
+    const mongoUri = process.env.MONGO_URI
+      ? process.env.MONGO_URI.replace(/"/g, "")
+      : "mongodb://localhost:27017/simba_motors";
+    await mongoose.connect(mongoUri);
 
     // Check if cars already exist
     const existingCars = await Car.countDocuments();
     if (existingCars > 0) {
-      console.log(`Database already has ${existingCars} cars. Skipping seeding to preserve existing data.`);
+      console.log(
+        `Database already has ${existingCars} cars. Skipping seeding to preserve existing data.`
+      );
       process.exit(0);
     }
 

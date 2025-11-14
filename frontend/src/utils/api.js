@@ -1,7 +1,9 @@
 // API utility functions for making HTTP requests
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+  process.env.NODE_ENV === "production"
+    ? "https://simba-cars.onrender.com/api"
+    : "http://localhost:5000/api";
 
 // Helper function to get auth token
 const getAuthToken = () => {

@@ -22,19 +22,17 @@ exports.updateFeeStructure = async (req, res) => {
     const settings = await Settings.getSettings();
 
     settings.feeStructure = {
-      ...settings.feeStructure.toObject(),
+      ...settings.feeStructure,
       ...feeStructure,
     };
 
     await settings.save();
     res.json({ message: "Fee structure updated successfully", settings });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to update fee structure",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to update fee structure",
+      error: error.message,
+    });
   }
 };
 
@@ -45,19 +43,17 @@ exports.updateContentPages = async (req, res) => {
     const settings = await Settings.getSettings();
 
     settings.contentPages = {
-      ...settings.contentPages.toObject(),
+      ...settings.contentPages,
       ...contentPages,
     };
 
     await settings.save();
     res.json({ message: "Content pages updated successfully", settings });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to update content pages",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to update content pages",
+      error: error.message,
+    });
   }
 };
 
@@ -68,7 +64,7 @@ exports.updateNotificationSettings = async (req, res) => {
     const settings = await Settings.getSettings();
 
     settings.notificationSettings = {
-      ...settings.notificationSettings.toObject(),
+      ...settings.notificationSettings,
       ...notificationSettings,
     };
 
@@ -78,12 +74,10 @@ exports.updateNotificationSettings = async (req, res) => {
       settings,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to update notification settings",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to update notification settings",
+      error: error.message,
+    });
   }
 };
 
@@ -94,19 +88,17 @@ exports.updateAppearanceSettings = async (req, res) => {
     const settings = await Settings.getSettings();
 
     settings.appearanceSettings = {
-      ...settings.appearanceSettings.toObject(),
+      ...settings.appearanceSettings,
       ...appearanceSettings,
     };
 
     await settings.save();
     res.json({ message: "Appearance settings updated successfully", settings });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to update appearance settings",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to update appearance settings",
+      error: error.message,
+    });
   }
 };
 
@@ -115,30 +107,19 @@ exports.changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
-    // Get the admin user (assuming single admin for now)
-    const admin = await User.findOne({ username: "admin" });
-    if (!admin) {
-      return res.status(404).json({ message: "Admin user not found" });
-    }
-
-    // Verify current password
-    const isValidPassword = await bcrypt.compare(
-      currentPassword,
-      admin.password
-    );
+    // For this implementation, we use environment-based authentication
+    // Verify current password against env variable
+    const isValidPassword = currentPassword === process.env.ADMIN_PASSWORD;
     if (!isValidPassword) {
       return res.status(400).json({ message: "Current password is incorrect" });
     }
 
-    // Hash new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-    // Update password
-    admin.password = hashedPassword;
-    await admin.save();
-
-    res.json({ message: "Password changed successfully" });
+    // In a production app, you'd update a database record
+    // For now, we'll just return success since env variables are handled externally
+    res.json({
+      message:
+        "Password change request received. Note: Password changes require environment variable updates.",
+    });
   } catch (error) {
     res
       .status(500)
@@ -220,12 +201,10 @@ exports.getActiveSessions = async (req, res) => {
 
     res.json(activeSessions);
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to fetch active sessions",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to fetch active sessions",
+      error: error.message,
+    });
   }
 };
 
@@ -274,11 +253,9 @@ exports.clearInactiveSessions = async (req, res) => {
     await settings.save();
     res.json({ message: "Inactive sessions cleared successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to clear inactive sessions",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Failed to clear inactive sessions",
+      error: error.message,
+    });
   }
 };

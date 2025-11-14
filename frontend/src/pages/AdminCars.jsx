@@ -111,7 +111,7 @@ const AdminCars = () => {
   const fetchCars = async () => {
     try {
       const response = await getCars();
-      setCars(Array.isArray(response.data.cars) ? response.data.cars : []);
+      setCars(Array.isArray(response.cars) ? response.cars : []);
       // Force re-render by updating state
       setCars((prev) => [...prev]);
     } catch (error) {

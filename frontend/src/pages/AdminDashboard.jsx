@@ -13,7 +13,7 @@ import {
   FaMapMarkerAlt,
   FaTachometerAlt,
 } from "react-icons/fa";
-import { getCars, addCar, updateCar, deleteCar } from "../utils/api";
+import { getCars, addCar, updateCar, deleteCar, getAllCars } from "../utils/api";
 
 const AdminDashboard = () => {
   const [cars, setCars] = useState([]);
@@ -44,10 +44,12 @@ const AdminDashboard = () => {
 
   const fetchCars = async () => {
     try {
-      const response = await getCars();
-      setCars(response.data);
+      const token = localStorage.getItem("adminToken");
+      const response = await getAllCars(token);
+      setCars(Array.isArray(response) ? response : []);
     } catch (error) {
       console.error("Error fetching cars:", error);
+      setCars([]);
     }
   };
 

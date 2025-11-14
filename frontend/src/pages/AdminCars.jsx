@@ -17,7 +17,7 @@ import {
   FaFilter,
   FaTag,
 } from "react-icons/fa";
-import { getCars, addCar, updateCar, deleteCar } from "../utils/api";
+import { getCars, addCar, updateCar, deleteCar, getAllCars } from "../utils/api";
 import { Button } from "../components/ui/Button";
 
 const AdminCars = () => {
@@ -110,8 +110,9 @@ const AdminCars = () => {
 
   const fetchCars = async () => {
     try {
-      const response = await getCars();
-      setCars(Array.isArray(response.cars) ? response.cars : []);
+      const token = localStorage.getItem("adminToken");
+      const response = await getAllCars(token);
+      setCars(Array.isArray(response) ? response : []);
       // Force re-render by updating state
       setCars((prev) => [...prev]);
     } catch (error) {

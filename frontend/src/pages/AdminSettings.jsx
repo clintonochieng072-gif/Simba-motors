@@ -82,7 +82,7 @@ const AdminSettings = () => {
   const loadSettings = async () => {
     try {
       const response = await getSettings();
-      const settings = response.data;
+      const settings = response?.data || {};
 
       setFeeStructure(settings.feeStructure || feeStructure);
       setContentPages(settings.contentPages || contentPages);
@@ -101,18 +101,20 @@ const AdminSettings = () => {
   const loadApiKeys = async () => {
     try {
       const response = await getApiKeys();
-      setApiKeys(response.data);
+      setApiKeys(response?.data || []);
     } catch (error) {
       console.error("Error loading API keys:", error);
+      setApiKeys([]);
     }
   };
 
   const loadActiveSessions = async () => {
     try {
       const response = await getActiveSessions();
-      setActiveSessions(response.data);
+      setActiveSessions(response?.data || []);
     } catch (error) {
       console.error("Error loading active sessions:", error);
+      setActiveSessions([]);
     }
   };
 

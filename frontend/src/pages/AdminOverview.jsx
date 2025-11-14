@@ -61,13 +61,15 @@ const AdminOverview = () => {
   const fetchCars = async () => {
     try {
       const response = await getCars();
-      setCars(response.data);
+      const carsData = response?.cars || [];
+      setCars(carsData);
       setStats((prev) => ({
         ...prev,
-        totalActiveListings: response.data.length,
+        totalActiveListings: carsData.length,
       }));
     } catch (error) {
       console.error("Error fetching cars:", error);
+      setCars([]);
     }
   };
 

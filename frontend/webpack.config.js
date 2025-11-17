@@ -9,7 +9,8 @@ module.exports = (env, argv) => {
 
   // Load environment variables based on mode
   const envFile = isProduction ? ".env.production" : ".env";
-  const envConfig = dotenv.config({ path: path.resolve(__dirname, envFile) }).parsed || {};
+  const envConfig =
+    dotenv.config({ path: path.resolve(__dirname, envFile) }).parsed || {};
 
   return {
     mode: argv.mode || "development",
@@ -20,62 +21,61 @@ module.exports = (env, argv) => {
       publicPath: "/",
       clean: true,
     },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env", "@babel/preset-react"],
+            },
           },
         },
-      },
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader", "postcss-loader"],
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        type: "asset/resource",
-      },
-    ],
-  },
-  resolve: {
-    extensions: [".js", ".jsx"],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "public/index.html"),
-      inject: true,
-      publicPath: "/",
-    }),
-    new webpack.DefinePlugin({
-      "process.env": JSON.stringify({
-        ...process.env,
-        ...envConfig,
-        NODE_ENV: argv.mode || "development",
+        {
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader", "postcss-loader"],
+        },
+        {
+          test: /\.(png|jpe?g|gif|svg)$/i,
+          type: "asset/resource",
+        },
+      ],
+    },
+    resolve: {
+      extensions: [".js", ".jsx"],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, "public/index.html"),
+        inject: true,
+        publicPath: "/",
       }),
-    }),
-  ],
-  devServer: {
-    static: {
-      directory: path.join(__dirname, "dist"),
-    },
-    compress: true,
-    port: 3003,
-    historyApiFallback: {
-      disableDotRule: true,
-      index: "/",
-    },
-    proxy: {
-      "/api": {
-        target: "http://localhost:5000",
-        changeOrigin: true,
+      new webpack.DefinePlugin({
+        "process.env": JSON.stringify({
+          ...process.env,
+          ...envConfig,
+          NODE_ENV: argv.mode || "development",
+        }),
+      }),
+    ],
+    devServer: {
+      static: {
+        directory: path.join(__dirname, "dist"),
+      },
+      compress: true,
+      port: 3003,
+      historyApiFallback: {
+        disableDotRule: true,
+        index: "/",
+      },
+      proxy: {
+        "/api": {
+          target: "http://localhost:3001",
+          changeOrigin: true,
+        },
       },
     },
-  },
+  };
 };
-}
-

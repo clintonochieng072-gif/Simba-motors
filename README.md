@@ -13,7 +13,7 @@ A full-stack car dealership website built with React.js, Node.js, Express.js, Mo
 
 ## Tech Stack
 
-- **Frontend**: React.js, Tailwind CSS, React Router
+- **Frontend**: Next.js, React.js, Tailwind CSS
 - **Backend**: Node.js, Express.js, MongoDB Atlas
 - **Authentication**: JWT
 - **Image Storage**: Cloudinary
@@ -54,21 +54,21 @@ PORT=5000
 
    ```bash
    cd backend
-   npm start
+   PORT=3001 npm start
    ```
 
-2. Start the frontend development server:
+2. Start the Next.js frontend development server:
 
    ```bash
-   cd frontend
-   npm start
+   cd nextjs-simba-motors
+   npm run dev
    ```
 
 3. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Admin Access
 
-- **Username**: clinton
+- **Email**: clintonochieng072@gmail.com
 - **Password**: admin123
 - Access the admin panel at `/admin`
 

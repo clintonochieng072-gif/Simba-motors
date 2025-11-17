@@ -35,9 +35,9 @@ exports.getAllCars = async (req, res) => {
   try {
     const cars = await Car.find();
     // Ensure features is always an array
-    const processedCars = cars.map(car => ({
+    const processedCars = cars.map((car) => ({
       ...car.toObject(),
-      features: car.features || []
+      features: car.features || [],
     }));
     res.json(processedCars);
   } catch (error) {
@@ -68,8 +68,11 @@ exports.addCar = async (req, res) => {
     } = req.body;
     let images = [];
 
-    if (req.files && req.files.filter(f => f.fieldname === 'images').length > 0) {
-      for (const file of req.files.filter(f => f.fieldname === 'images')) {
+    if (
+      req.files &&
+      req.files.filter((f) => f.fieldname === "images").length > 0
+    ) {
+      for (const file of req.files.filter((f) => f.fieldname === "images")) {
         try {
           const result = await cloudinary.uploader.upload(file.path);
           images.push(result.secure_url);
@@ -125,7 +128,7 @@ exports.addCar = async (req, res) => {
     // Ensure features is always an array in response
     const processedCar = {
       ...savedCar.toObject(),
-      features: savedCar.features || []
+      features: savedCar.features || [],
     };
     res.status(201).json(processedCar);
   } catch (error) {
@@ -143,8 +146,12 @@ exports.updateCar = async (req, res) => {
     const updateData = {};
     let images = req.body.images || [];
 
-    if (req.files && req.files.filter(f => f.fieldname === 'images').length > 0) {
-      for (const file of req.files.filter(f => f.fieldname === 'images')) {
+    if (
+      req.files &&
+      req.files.filter &&
+      req.files.filter((f) => f.fieldname === "images").length > 0
+    ) {
+      for (const file of req.files.filter((f) => f.fieldname === "images")) {
         try {
           const result = await cloudinary.uploader.upload(file.path);
           images.push(result.secure_url);
@@ -212,7 +219,7 @@ exports.updateCar = async (req, res) => {
     // Ensure features is always an array in response
     const processedCar = {
       ...updatedCar.toObject(),
-      features: updatedCar.features || []
+      features: updatedCar.features || [],
     };
     res.json(processedCar);
   } catch (error) {

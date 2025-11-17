@@ -3,6 +3,8 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "https://simba-cars.onrender.com/api";
 
+console.log("API_BASE_URL at runtime:", API_BASE_URL);
+
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
   return localStorage.getItem("adminToken");

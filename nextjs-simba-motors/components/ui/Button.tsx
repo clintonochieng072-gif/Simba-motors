@@ -10,6 +10,9 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
+  console.log(">>> BUTTON COMPONENT ACTIVE");
+  console.log("Button props:", props);
+
   return (
     <button
       {...props} // Spread props FIRST

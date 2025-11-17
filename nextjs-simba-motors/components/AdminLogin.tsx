@@ -28,6 +28,8 @@ const AdminLogin = () => {
     setIsLoading(true);
     setError("");
 
+    console.log("Submitting credentials:", credentials);
+
     try {
       const response = await login(credentials);
       console.log("LOGIN RESPONSE:", response); // Debug log

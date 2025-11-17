@@ -30,6 +30,7 @@ const AdminLogin = () => {
 
     try {
       const response = await login(credentials);
+      console.log("LOGIN RESPONSE:", response); // Debug log
       if (response.token) {
         console.log("Login successful, setting token and redirecting...");
         localStorage.setItem("adminToken", response.token);
@@ -44,6 +45,7 @@ const AdminLogin = () => {
         throw new Error("Invalid response");
       }
     } catch (err) {
+      console.log("LOGIN ERROR:", err); // Debug log
       setError("Invalid credentials");
       showError("Login failed. Please check your credentials.");
     } finally {

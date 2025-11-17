@@ -91,11 +91,24 @@ export const updateSession = (data: any): Promise<any> =>
   });
 
 // Existing API functions (keeping for compatibility)
-export const login = (credentials: any): Promise<any> =>
-  apiRequest("/auth/login", {
+export const login = async (credentials: any): Promise<any> => {
+  const url = `${API_BASE_URL}/auth/login`;
+  const response = await fetch(url, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
     body: JSON.stringify(credentials),
   });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(error || `HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+};
 
 export const getCars = (params: Record<string, string> = {}): Promise<any> => {
   const queryString = new URLSearchParams(params).toString();

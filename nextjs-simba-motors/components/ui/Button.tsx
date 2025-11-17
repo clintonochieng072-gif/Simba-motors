@@ -4,13 +4,19 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
 }
 
-export function Button({ className, loading, ...props }: ButtonProps) {
+export function Button({
+  className = "",
+  loading,
+  children,
+  ...props
+}: ButtonProps) {
   return (
     <button
-      {...props} // <-- ESSENTIAL
-      className={`px-4 py-2 rounded ${className}`}
+      {...props} // Spread props FIRST
+      className={`px-4 py-2 rounded ${className}`} // ClassName LAST
+      disabled={loading || props.disabled}
     >
-      {loading ? "Loading..." : props.children}
+      {loading ? "Loading..." : children}
     </button>
   );
 }

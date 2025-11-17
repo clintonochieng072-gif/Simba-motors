@@ -17,7 +17,7 @@ const app = express();
 const corsOptions = {
   origin:
     process.env.NODE_ENV === "production"
-      ? "https://simba-motors.vercel.app"
+      ? ["https://simba-motors.vercel.app", "https://simba-cars.onrender.com"]
       : [
           "http://localhost:3000",
           "http://127.0.0.1:3000",

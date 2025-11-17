@@ -28,6 +28,7 @@ const AdminLogin = () => {
     setIsLoading(true);
     setError("");
 
+    console.log("FORM SUBMITTED!!!");
     console.log("Submitting credentials:", credentials);
 
     try {

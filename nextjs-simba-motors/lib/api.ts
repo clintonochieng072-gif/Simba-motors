@@ -1,9 +1,7 @@
 // API utility functions for making HTTP requests
 
 const API_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_API_URL || "https://simba-cars.onrender.com/api"
-    : process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_API_URL ?? "https://simba-cars.onrender.com/api";
 
 // Helper function to get auth token
 const getAuthToken = (): string | null => {

@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Car = require("./models/Car");
+const Admin = require("./models/Admin");
+const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 const dummyCars = [
@@ -266,6 +268,23 @@ async function seedDatabase() {
       ? process.env.MONGO_URI.replace(/"/g, "")
       : "mongodb://localhost:27017/simba_motors";
     await mongoose.connect(mongoUri);
+
+    // Seed admin user
+    const adminEmail = "clintonochieng072@gmail.com";
+    const adminPassword = "admin123";
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+
+    const existingAdmin = await Admin.findOne({ email: adminEmail });
+    if (!existingAdmin) {
+      await Admin.create({
+        email: adminEmail,
+        password: hashedPassword,
+        role: "admin",
+      });
+      console.log("Admin user seeded successfully!");
+    } else {
+      console.log("Admin user already exists.");
+    }
 
     // Check if cars already exist
     const existingCars = await Car.countDocuments();

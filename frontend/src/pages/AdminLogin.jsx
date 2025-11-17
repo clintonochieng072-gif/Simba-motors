@@ -8,7 +8,7 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const [credentials, setCredentials] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [error, setError] = useState("");
@@ -56,13 +56,13 @@ const AdminLogin = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input
-                id="username"
-                name="username"
-                type="text"
+                id="email"
+                name="email"
+                type="email"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-                value={credentials.username}
+                placeholder="Email"
+                value={credentials.email}
                 onChange={handleChange}
               />
             </div>

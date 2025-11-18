@@ -5,6 +5,7 @@ A modern, SEO-optimized car dealership website built with Next.js 16, featuring 
 ## 🚀 Features
 
 ### Frontend Features
+
 - **Server-Side Rendering (SSR)** for dynamic car listings and user dashboards
 - **Static Site Generation (SSG)** for static pages (About, Contact, Services)
 - **SEO Optimized** with meta tags, Open Graph, structured data (JSON-LD)
@@ -14,6 +15,7 @@ A modern, SEO-optimized car dealership website built with Next.js 16, featuring 
 - **WhatsApp Integration** for direct customer communication
 
 ### Admin Dashboard
+
 - **Car Inventory Management** - Add, edit, delete, and manage car listings
 - **User Management** - View and manage user accounts
 - **Dashboard Analytics** - Overview of sales, leads, and performance metrics
@@ -21,6 +23,7 @@ A modern, SEO-optimized car dealership website built with Next.js 16, featuring 
 - **Authentication** - Secure admin login system
 
 ### SEO & Performance
+
 - Dynamic sitemap generation with car listings
 - Robots.txt configuration
 - Structured data for search engines
@@ -49,28 +52,33 @@ A modern, SEO-optimized car dealership website built with Next.js 16, featuring 
 ## 🚀 Installation & Setup
 
 1. **Clone the repository:**
+
    ```bash
    git clone <repository-url>
    cd nextjs-simba-motors
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Environment Setup:**
+
    ```bash
    cp .env.example .env.local
    ```
 
    Update the environment variables in `.env.local`:
+
    ```env
    NEXT_PUBLIC_SITE_URL=https://your-domain.com
    NEXT_PUBLIC_API_URL=https://your-api-url.com/api
    ```
 
 4. **Run the development server:**
+
    ```bash
    npm run dev
    ```
@@ -145,6 +153,7 @@ The app is fully configured for SEO with:
 ### Manual Deployment
 
 1. **Build the application:**
+
    ```bash
    npm run build
    ```
@@ -170,11 +179,13 @@ The frontend integrates with a Node.js backend API that provides:
 ## 🎨 Customization
 
 ### Styling
+
 - Uses Tailwind CSS for styling
 - Custom color scheme and design tokens
 - Responsive breakpoints configured
 
 ### Branding
+
 - Update metadata in `app/layout.tsx`
 - Replace logo and branding assets
 - Customize color scheme in Tailwind config
@@ -184,10 +195,12 @@ The frontend integrates with a Node.js backend API that provides:
 ### Common Issues
 
 1. **Build Errors:**
+
    - Ensure all environment variables are set
    - Check TypeScript compilation errors
 
 2. **API Connection Issues:**
+
    - Verify backend API is running
    - Check environment variable configuration
 
@@ -214,3 +227,5 @@ For support, contact the development team at [contact email].
 ---
 
 **Built with ❤️ for Simba Motors - Your trusted car dealership in Kenya**
+
+# Deployment test update

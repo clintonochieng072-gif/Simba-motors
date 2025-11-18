@@ -36,15 +36,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Dynamic car pages
   let carPages: MetadataRoute.Sitemap = [];
   try {
-    const response = await getCars();
-    const cars = response.cars || [];
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_API_URL ?? "https://simba-cars.onrender.com/api"
+      }/cars`
+    );
+    if (response.ok) {
+      const data = await response.json();
+      const cars = data.cars || [];
 
-    carPages = cars.map((car: any) => ({
-      url: `${baseUrl}/cars/${car._id}`,
-      lastModified: new Date(car.updatedAt || car.createdAt || Date.now()),
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    }));
+      carPages = cars.map((car: any) => ({
+        url: `${baseUrl}/cars/${car._id}`,
+        lastModified: new Date(car.updatedAt || car.createdAt || Date.now()),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      }));
+    }
   } catch (error) {
     console.error("Error fetching cars for sitemap:", error);
   }

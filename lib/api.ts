@@ -7,6 +7,7 @@ console.log("API_BASE_URL at runtime:", API_BASE_URL);
 
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
+  if (typeof window === 'undefined') return null;
   return localStorage.getItem("adminToken");
 };
 

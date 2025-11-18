@@ -15,17 +15,16 @@ const app = express();
 
 // Middleware
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? ["https://simba-motors.vercel.app", "https://simba-cars.onrender.com"]
-      : [
-          "http://localhost:3000",
-          "http://127.0.0.1:3000",
-          "http://localhost:3001",
-          "http://127.0.0.1:3001",
-          "http://localhost:5000",
-          "http://127.0.0.1:5000",
-        ],
+  origin: [
+    "https://simba-motors.vercel.app",
+    "https://simba-cars.onrender.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
+  ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],

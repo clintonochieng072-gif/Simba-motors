@@ -43,6 +43,7 @@ const AdminAddCar = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const formDataRef = useRef(formData);
+  const fileInputRef = useRef(null);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 30 }, (_, i) => currentYear - i);
@@ -440,9 +441,9 @@ const AdminAddCar = () => {
             <label className="block text-sm font-medium text-neutral-700 mb-2">
               Photos (At least 1 main image) *
             </label>
-            <label
+            <div
               className="border-2 border-dashed border-neutral-300 rounded-lg p-4 sm:p-6 text-center hover:border-primary-500 transition-colors cursor-pointer"
-              onClick={() => document.getElementById("image-upload").click()}
+              onClick={() => fileInputRef.current.click()}
             >
               <FaUpload className="mx-auto text-neutral-400 text-2xl sm:text-3xl mb-4" />
               <input
@@ -451,7 +452,7 @@ const AdminAddCar = () => {
                 accept="image/*"
                 onChange={handleImageUpload}
                 className="visually-hidden"
-                id="image-upload"
+                ref={fileInputRef}
                 required={images.length === 0}
               />
               <div className="text-primary-600 hover:text-primary-700 font-medium text-sm sm:text-base">
@@ -460,7 +461,7 @@ const AdminAddCar = () => {
               <p className="text-sm text-neutral-500 mt-2">
                 PNG, JPG, GIF up to 10MB each
               </p>
-            </label>
+            </div>
             {previewImages.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mt-4">
                 {previewImages.map((preview, index) => (
